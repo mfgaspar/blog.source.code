@@ -13,8 +13,9 @@ The following image is an example of using all of the out-of-the-box functionali
 
 ![Example of visualization using the Template Component](http://mfgaspar.github.io/assets/template_component_1.png)
 
-
 First of all, you need to understand the concept of templates. Usually there are terms associated, model and view, where you can understand the model as  the data you have to be displayed and the view the way you want to have displayed. It's not the purpose of this blog post to get into the details, but, you can find more information on the links in the next sentence. For now, there are 2 templates engines we can use: [Mustache](https:// github.com/janl/mustache.js) and  [Underscore](http://underscorejs.org/#template) templates. 
+
+You must select the type of template you want to use. You just need to go to the properties of the component and change the "Template Library" property. Note that the default engine is "Underscore". In this blog post series we will use "Mustache", so you need to change the selected engine on the compoent properties.  
 
 One of the best examples where to use the template component is when you have multiple elements you want to repeat, based on how many lines you got on the result of the execution of a specific query. 
 
