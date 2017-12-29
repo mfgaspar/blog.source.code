@@ -1,0 +1,39 @@
+# Site settings
+title: 'Cooking Analytics'
+description: 'My name is Miguel Gaspar and this blog is focused on Analytics solutions, providing architectural and development recipes, ..., that can be applied not only to traditional Business Analytics solutions but also to some hot topics like Big Data, IoT and Social Innovation. The content will mostly be based in the use of Pentaho technology.'
+keywords: 1analytics,big data,iot,social innovation,bi,business intelligence,ctools,pentaho,real-time,realtime,likve,insights,analysis,dashboards'
+url: 'http://mfgaspar.github.io'
+baseurl: '/'
+# google_analytics: 'UA-XXXXXX-X'
+# disqus_shortname: 'your-disqus-name'
+
+author:
+  name: 'Miguel Gaspar'
+  email: miguel.ferreira.gaspar@gmail.com
+  twitter_username: migfgaspar
+  facebook_username: miguel.ferreira.gaspar
+  github_username:  mfgaspar
+  linkedin_username:  mfgaspar
+defaults:
+  -
+    scope:
+      path: ''
+      type: 'posts'
+    values:
+        layout: 'post'
+
+# Build settings
+destination: _site
+paginate: 10
+permalink: /:year/:title/
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  # use Github Flavored Markdown
+  input: GFM
+  # do not replace newlines by <br>s
+  hard_wrap: false
+
+gems: ['jekyll-paginate']
+exclude: ['README.md', 'Gemfile', 'Gemfile.lock', 'screenshot.png']

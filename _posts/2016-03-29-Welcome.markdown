@@ -1,0 +1,23 @@
+---
+title:  "Welcome to Cooking Analytics"
+date:   2016-03-29 20:05
+categories: [Cooking Analytics]
+tags: [Cooking Analytics]
+---
+
+I hope you can find this Blog interesting, where you will be able to read about Analytics solutions bringing architecture discussions, development technics that can be aplied to Big Data solutions, IoT or Social Innovation solutions, most of the time focused in Pentaho. 
+
+Some of the times you will find just pointers to some other blogs and posts with very intersting stuff, that I believe it might bring value to the topics being discussed. It's important for me to get feedback from you so that I can go in your way, at the end the blog is for you, so I will relly on you!
+
+Let me also apologise for the poor English that you might find in the posts, I am getting better day-by-day but still with lots to improve.
+
+I will try to complement the text with images and videos as mutch as I can. Not sure I will be able to add a section for comments, but will investigate how it can it be done using this or another theme. 
+
+Anyhow, I would prefer to use twitter, facebook for comments, discussions, ... and contributions. 
+
+Send me an email if it's a private comment or question. 
+
+Looking foward to get feedback from you! 
+
+[Cooking Analytics]: http://mfgaspar.github.io/blog
+[Pentaho CTools Book]: https://www.packtpub.com/big-data-and-business-intelligence/learning-pentaho-ctools
