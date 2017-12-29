@@ -1,11 +1,11 @@
 # Site settings
 title: 'Cooking Analytics'
-description: 'My name is Miguel Gaspar and this blog is focused on Analytics solutions, providing architectural and development recipes, ..., that can be applied not only to traditional Business Analytics solutions but also to some hot topics like Big Data, IoT and Social Innovation. The content will mostly be based in the use of Pentaho technology.'
-keywords: 1analytics,big data,iot,social innovation,bi,business intelligence,ctools,pentaho,real-time,realtime,likve,insights,analysis,dashboards'
+description: 'My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. '
+keywords: analytics,big data,iot,social innovation,bi,business intelligence,ctools,pentaho,real-time,realtime,live,insights,analysis,dashboards,artificial intelligence,machine learning'
 url: 'http://mfgaspar.github.io'
 baseurl: '/'
-# google_analytics: 'UA-XXXXXX-X'
-# disqus_shortname: 'your-disqus-name'
+google_analytics: 'UA-75757763-1'
+disqus_shortname: 'mfgaspar'
 
 author:
   name: 'Miguel Gaspar'
