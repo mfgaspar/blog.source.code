@@ -89,7 +89,7 @@ The code does not change any of the code, neither does require any compilation o
 	2017-10-09 04:44:51,137 INFO  [...] (SESSION-END|192.168.56.1|suzy|23BD39EB76D0D973AD867CB92CF1E916)
 	2017-10-09 04:44:51,155 INFO  [...] (NO-AUTHENTICATION|192.168.56.1|anonymousUser|5A7E00C559286B545690AB88197D997F)
 
-All files available ![here](https://github.com/mfgaspar/mfgaspar.github.io-samples/tree/master/pentaho/security.events.authenticate/artifacts).
+All files available [here](https://github.com/mfgaspar/mfgaspar.github.io-samples/tree/master/pentaho/security.events.authenticate/artifacts).
 
 
 

@@ -9,9 +9,9 @@ The posts also show how we can perform data streaming in PDI, by using non-endin
 
 Here are the links:
 
-- ![Live Insight Dashboard on Pentaho - Part 1: Introduction](http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-1/)
-- ![[Live Insight Dashboard on Pentaho - Part 2: High level overview](http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-2/)
-- ![[Live Insight Dashboard on Pentaho - Part 3: MQTT, the Message Broker and Data Integration](http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-3/)
+- [Live Insight Dashboard on Pentaho - Part 1: Introduction](http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-1/)
+- [Live Insight Dashboard on Pentaho - Part 2: High level overview](http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-2/)
+- [Live Insight Dashboard on Pentaho - Part 3: MQTT, the Message Broker and Data Integration](http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-3/)
 
 
 More than 1 year ago I have released a series of blog posts about a real-time dashboard using CTools and MQTT protocol. This covers how we could build a real-time dashboard for IoT showing real-time sensor data in a CTools dashboard.
@@ -27,7 +27,7 @@ The samples I’ve created were using some custom code on PDI, but in the meanwh
 
 I have updated my samples to use the MQTT steps in Pentaho Marketplace, and also updated the libraries used of the frontend. The samples are simpler to execute since I am now using a public MQTT broker.
 
-You can download them from the ![link](https://github.com/mfgaspar/mfgaspar.github.io-samples/tree/master/pentaho/mqtt.project.source.code)
+You can download them from the [link](https://github.com/mfgaspar/mfgaspar.github.io-samples/tree/master/pentaho/mqtt.project.source.code)
 
 Instruction to get them working:
 
