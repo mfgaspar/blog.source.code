@@ -90,6 +90,10 @@ The template component is a component that allows us to create custom visualizat
 
 The template component is a component that allows us to create custom visualizations based on templates and models, all based on the data that we have acquired from a data source. 
 
+**TIP:**
+Don't forget that we use Twitter Bootstrap framework, so you can also use it when defining your templates. 
+
+
 
 Follow me at [Twitter](https://twitter.com/migfgaspar)
 

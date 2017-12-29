@@ -5,8 +5,7 @@ categories: [Pentaho, CTools, Components]
 tags: [Pentaho, CTools, Components, Template Component]
 ---
 
-The template component is a very powerfull component, you will allways need to write at least one JavaScript function, to retun back to the component the template you want to use. In future we need to consider a way to reuse templates withoput copy/paste the code.  
-
+In the first blog post under the subject I referred about some advanced options. Let's cover one of those options.
 
 To get familiar with the earlier post I wrote on this subject, please refer to the following links: 
 
@@ -16,7 +15,6 @@ To get familiar with the earlier post I wrote on this subject, please refer to t
 
 In this post we will cover the .... 
 
-...
 
 
 Follow me at [Twitter](https://twitter.com/migfgaspar)
