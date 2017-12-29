@@ -5,7 +5,7 @@ keywords: analytics,big data,iot,social innovation,bi,business intelligence,ctoo
 url: 'http://mfgaspar.github.io'
 baseurl: '/'
 google_analytics: 'UA-75757763-1'
-disqus_shortname: 'mfgaspar'
+#disqus_shortname: 'mfgaspar'
 
 author:
   name: 'Miguel Gaspar'
