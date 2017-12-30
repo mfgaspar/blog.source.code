@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-75757763-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+  <title>Embeding Dashboards - The Basics</title>
+  <meta name="description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+  <meta name="author" content="Miguel Gaspar">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="analytics,big data,iot,social innovation,bi,business intelligence,ctools,pentaho,real-time,realtime,live,insights,analysis,dashboards,artificial intelligence,machine learning'>
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cooking Analytics">
+  <meta name="twitter:description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Cooking Analytics">
+  <meta property="og:description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-194x194.png" sizes="194x194">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/android-chrome-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="/images/favicons/manifest.json">
+  <link rel="shortcut icon" href="/images/favicons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://mfgaspar.github.io//2016/Embeding-CDF-and-CDE-Dashboards-Part-1/">
+  <link rel="alternate" type="application/rss+xml" title="Cooking Analytics" href="/feed.xml">
+</head>
+
+
+  <body>
+    <span class="mobile btn-mobile-menu">
+  <i class="icon icon-list btn-mobile-menu__icon"></i>
+  <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+</span>
+  
+<header class="panel-cover" style="background-image: url(/images/cover.jpg)">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <a href="/" title="link to home of Cooking Analytics">
+          <img src="/images/profile.jpg" class="user-image" alt="My Profile Photo">
+          <h1 class="panel-cover__title panel-title">Cooking Analytics</h1>
+        </a>
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description">My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="link to Cooking Analytics blog" class="blog-button">Blog</a></li>
+            </ul>
+          </nav>
+
+          <nav class="cover-navigation navigation--social">
+            <ul class="navigation">
+          
+            
+              <!-- Twitter -->
+              <li class="navigation__item">
+                <a href="http://twitter.com/migfgaspar" title="@migfgaspar on Twitter" target="_blank">
+                  <i class="icon icon-social-twitter"></i>
+                  <span class="label">Twitter</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- Facebook -->
+              <li class="navigation__item">
+                <a href="http://fb.me/miguel.ferreira.gaspar" title="miguel.ferreira.gaspar on Facebook" target="_blank">
+                  <i class="icon icon-social-facebook"></i>
+                  <span class="label">Facebook</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- LinkedIn -->
+              <li class="navigation__item">
+                <a href="https://www.linkedin.com/in/mfgaspar" title="mfgaspar on LinkedIn" target="_blank">
+                  <i class="icon icon-social-linkedin"></i>
+                  <span class="label">LinkedIn</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- GitHub -->
+              <li class="navigation__item">
+                <a href="https://www.github.com/mfgaspar" title="mfgaspar on GitHub" target="_blank">
+                  <i class="icon icon-social-github"></i>
+                  <span class="label">GitHub</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- Email -->
+              <li class="navigation__item">
+                <a href="mailto:miguel.ferreira.gaspar@gmail.com" title="Email miguel.ferreira.gaspar@gmail.com" target="_blank">
+                  <i class="icon icon-mail"></i>
+                  <span class="label">Email</span>
+                </a>
+              </li>
+            
+
+            <!-- RSS -->
+            <li class="navigation__item">
+              <a href="/feed.xml" title="Subscribe" target="_blank">
+                <i class="icon icon-rss"></i>
+                <span class="label">RSS</span>
+              </a>
+            </li>
+          
+            </ul>
+          </nav>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+      <div class="content-wrapper__inner">
+        <article class="post-container post-container--single">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="15 Oct 2016" class="post-meta__date date">15 Oct 2016</time> &#8226; <span class="post-meta__tags">on <a href="/tags/#Embedding">Embedding</a> </span>
+    </div>
+    <h1 class="post-title">Embeding Dashboards - The Basics</h1>
+  </header>
+  <section class="post">
+    <p>In a earlier <a href="http://pedroalves-bi.blogspot.pt/2013/08/embedded-analytics-in-pentaho-with.html">post</a>, Pedro Alves talked about embedding CTools dashboards in two different ways: using “div” and “iframe” integration.</p>
+
+<p>Now that we have RequireJS, there are better ways to integrate dashboards in other application.</p>
+
+<p>As you should now there are two kinds of custom dashboards in Pentaho:</p>
+
+<ul>
+  <li>CDF dashboards,</li>
+  <li>CDE dashboards;</li>
+</ul>
+
+<p>To be able to embed the dashboards you first need to create them, so let’s suppose you already have some dashboards you want to be part of your website/webapp. The dashboards, build with RequireJS can also be embedded via RequireJS, so let’s cover how.</p>
+
+<h2 id="embedding-cdf-dashboards">Embedding CDF dashboards</h2>
+
+<p>If you have some requirements were you need to have a complete control of your html and code being executed, then for sure you want to build a CDF dashboard. You can write the code of your dashboard in the page were you are embedding it. To do it, there is one mandatory script you need to include, that’s the script with the code that will allows us to call the CDF dashboard. For that you need to make the requests
+ to your Pentaho Server, so that the server can return the script. 
+You just need the following script tag:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://SERVERNAME&lt;:PORT&gt;/WEBAPPPATH/plugin/pentaho-cdf/api/cdf-embed.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>Per instance, if your server is in the same machine,localhost, and running in port 8080:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8080/pentaho/plugin/pentaho-cdf/api/cdf-embed.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>This will give your acess to the CDF framework.</p>
+
+<p>You jut need to build your dashboard code inside an HTML page or just include the code that’s on another file and that way you will be able to reuse it.</p>
+
+<p>An HTML page where you are embeding your dashboard can llok like:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+	<span class="nt">&lt;head&gt;</span>
+		<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"content-type"</span> <span class="na">content=</span><span class="s">"text/html; charset=utf-8"</span><span class="nt">/&gt;</span>
+		<span class="nt">&lt;title&gt;</span>mySample<span class="nt">&lt;/title&gt;</span>
+		<span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8080/pentaho/plugin/pentaho-cdf/api/cdfembed.js"</span><span class="nt">/&gt;</span>
+	<span class="o">&lt;</span><span class="sr">/head</span><span class="err">&gt;
+</span>	<span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
+		<span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span> <span class="nx">I</span> <span class="nx">am</span> <span class="nx">embedding</span> <span class="nx">a</span> <span class="nx">CDF</span> <span class="nx">dashboard</span> <span class="k">in</span> <span class="nx">a</span> <span class="nx">HTML</span> <span class="nx">page</span><span class="o">!&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>		<span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span> <span class="nx">Here</span> <span class="nx">I</span> <span class="nx">Will</span> <span class="nx">have</span> <span class="nx">my</span> <span class="nx">own</span> <span class="nx">page</span><span class="o">!</span> <span class="o">&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>		<span class="o">&lt;</span><span class="nx">div</span><span class="o">&gt;</span> <span class="nx">And</span> <span class="nx">here</span><span class="p">,</span> <span class="nx">I</span> <span class="nx">will</span> <span class="nx">embed</span> <span class="nx">my</span> <span class="nx">dashboard</span><span class="o">!</span> 
+			<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">id</span><span class="o">=</span><span class="s2">"sampleObject"</span><span class="o">&gt;&lt;</span><span class="sr">/div</span><span class="err">&gt;
+</span>			<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text/javascript"</span><span class="o">&gt;</span>
+				<span class="nx">require</span><span class="p">([</span><span class="s1">'cdf/Dashboard.Blueprint'</span><span class="p">,</span> <span class="s1">'cdf/components/SelectComponent'</span><span class="p">],</span>
+					<span class="kd">function</span><span class="p">(</span><span class="nx">Dashboard</span><span class="p">,</span> <span class="nx">SelectComponent</span><span class="p">)</span> <span class="p">{</span>
+						<span class="kd">var</span> <span class="nx">myDashboard</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Dashboard</span><span class="p">();</span>
+						<span class="nx">myDashboard</span><span class="p">.</span><span class="nx">addParameter</span><span class="p">(</span><span class="s2">"region"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">);</span>
+						<span class="kd">var</span> <span class="nx">selectComponent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SelectComponent</span><span class="p">({</span>
+							<span class="na">name</span><span class="p">:</span> <span class="s2">"regionSelector"</span><span class="p">,</span>
+							<span class="na">type</span><span class="p">:</span> <span class="s2">"select"</span><span class="p">,</span>
+							<span class="na">parameters</span><span class="p">:</span> <span class="p">[],</span>
+							<span class="na">valuesArray</span><span class="p">:</span> <span class="p">[[</span><span class="s2">"1"</span><span class="p">,</span><span class="s2">"Lisbon"</span><span class="p">],[</span><span class="s2">"2"</span><span class="p">,</span><span class="s2">"Dusseldorf"</span><span class="p">]],</span>
+							<span class="na">parameter</span><span class="p">:</span> <span class="s2">"region"</span><span class="p">,</span>
+							<span class="na">valueAsId</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+							<span class="na">htmlObject</span><span class="p">:</span> <span class="s2">"sampleObject"</span><span class="p">,</span>
+							<span class="na">executeAtStart</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+							<span class="na">postChange</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+								<span class="kd">var</span> <span class="nx">choice</span> <span class="o">=</span> <span class="nx">myDashboard</span><span class="p">.</span><span class="nx">getParameterValue</span><span class="p">(</span><span class="k">this</span><span class="p">.</span>
+								<span class="nx">parameter</span><span class="p">);</span>
+								<span class="nx">alert</span><span class="p">(</span><span class="s2">"You chose: "</span> <span class="o">+</span> <span class="nx">choice</span><span class="p">);</span>
+							<span class="p">}</span>
+						<span class="p">});</span>
+						<span class="nx">myDashboard</span><span class="p">.</span><span class="nx">addComponent</span><span class="p">(</span><span class="nx">selectComponent</span><span class="p">);</span>
+						<span class="nx">myDashboard</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+					<span class="p">}</span>
+				<span class="p">);</span>
+			<span class="nt">&lt;/script&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>As you can see on the code above, we start by addind a script tag to include the CDF framework in our webpage, and latter we are able to use the framework to build a CDF dashboard that is embedded in the webpage/webapp.</p>
+
+<h2 id="embedding-cde-dashboards">Embedding CDE dashboards</h2>
+
+<p>If you are the king of developer that wants to save some time, than you can build your dashboard using CDE, than it’s also possible to embed it.<br />
+To embed a CDE dashboard, you really must have the dashboard already built and you just need to require it on your webpage/webapp. To do it you also need to include a script tag to call for the dashboard. Here you won’t need to include the CDF framework, but you will need to require the CDE framework, that will automatically include CDF.</p>
+
+<p>The way to call it is like following:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://SERVERNAME&lt;:PORT&gt;/WEBAPPPATH/plugin/pentaho-cdf/api/cde-embed.js"</span><span class="nt">&gt;&lt;/script&gt;</span> 
+</code></pre></div></div>
+
+<p>Per instance, if your server is in “localhost”, and running in port “8080”:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script</span> <span class="na">type=</span><span class="s">"text/javascript"</span> <span class="na">src=</span><span class="s">"http://localhost:8080/pentaho/plugin/pentaho-cdf/api/cde-embed.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>Once you did it you are able to require for your dashboard, by directly calling the getDashboard available in CDE or by making use of the “dash” RequireJS plugin.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">require</span><span class="p">([</span><span class="s1">'/pentaho/plugin/pentaho-cdf-dd/api/renderer/getDashboard?path=/public/dash /sample.wcdf'</span><span class="p">],</span> 
+	<span class="kd">function</span><span class="p">(</span><span class="nx">SampleDash</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">sampleDash</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SampleDash</span><span class="p">(</span><span class="s2">"content1"</span><span class="p">);</span>
+		<span class="nx">sampleDash</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>Or:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">require</span><span class="p">([</span><span class="s1">'dash!/public/dash /sample.wcdf'</span><span class="p">],</span> 
+	<span class="kd">function</span><span class="p">(</span><span class="nx">SampleDash</span><span class="p">)</span> <span class="p">{</span>
+		<span class="kd">var</span> <span class="nx">sampleDash</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SampleDash</span><span class="p">(</span><span class="s2">"content1"</span><span class="p">);</span>
+		<span class="nx">sampleDash</span><span class="p">.</span><span class="nx">render</span><span class="p">();</span>
+	<span class="p">}</span>
+<span class="p">);</span>
+</code></pre></div></div>
+
+<p>Here you can render your dashboard in your webpage/webapp by calling the <strong>render()</strong> method of your dashboard, but another option is to use <strong>setupDOM()</strong> followed by <strong>renderDashboard()</strong>. The great advantage of using the setupDOM() first you will get the DOM in your page and you will be able to manipulate it before starting the lifecycle of the dashboard.</p>
+
+<p><strong>Note:</strong> please keep in mind that the scripts tags that were used as example also can be called using RequireJS. but for that you need to include RequireJS in your page.</p>
+
+<h2 id="avoid-cross-site-domain-request">Avoid Cross Site Domain Request</h2>
+
+<p>When embedding dashboards from a different server we might get some denial, because the server won’t allow Cross Domain Requests. There is on one extra setting that we can make use of to avoid it. To be possible to embed the dashboard with this issue, we can set the following property of the settings.xml file of CDF or CDE plugins:</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;allow-cross-domain-resources&gt;</span>true<span class="nt">&lt;/allow-cross-domain-resources&gt;</span>
+</code></pre></div></div>
+
+<p>You are now able to delight your users with amazing analytics, without completely  getting out of your website/webapp and without letting the user know what technologies are you using to leverage some of the work.</p>
+
+<p>Follow me at <a href="https://twitter.com/migfgaspar">Twitter</a></p>
+
+
+  </section>
+  
+</article>
+ 
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-571518f68ebfed3f"></script>
+
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/twitter/offer?url=http://mfgaspar.github.io/2016/Embeding-CDF-and-CDE-Dashboards-Part-1/&text=&pco=tbxnj-1.0&pubid=&ct=1" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/twitter.png" border="0" alt="Twitter"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/linkedin/offer?url=http://mfgaspar.github.io/2016/Embeding-CDF-and-CDE-Dashboards-Part-1/&pubid=&ct=1&summary=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/linkedin.png" border="0" alt="LinkedIn"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/facebook/offer?url=http://mfgaspar.github.io/2016/Embeding-CDF-and-CDE-Dashboards-Part-1/&pubid=&ct=1&title=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/facebook.png" border="0" alt="Facebook"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/google_plus_one/offer?url=http://mfgaspar.github.io/2016/Embeding-CDF-and-CDE-Dashboards-Part-1/&pubid=&ct=1&title=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/google_plusone_share.png" border="0" alt="Google+"/></a>
+<!--
+<a href="https://api.addthis.com/oexchange/0.8/forward/link/offer?url=http%3A%2F%2Fwww.addthis.com&pubid=ra-571518f68ebfed3f&ct=1&title=AddThis%20-%20Get%20likes%2C%20get%20shares%2C%20get%20followers&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/link.png" border="0" alt="Copy Link"/></a>
+-->
+
+<div id="disqus_thread"></div>
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//cookinganalytics.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+      </div>
+
+      <footer class="footer">
+  <span class="footer__copyright">&copy; 2017 Miguel Gaspar. All rights reserved.</span>
+</footer> 
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75757763-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+    </div>
+  </body>
+</html>

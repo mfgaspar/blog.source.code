@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-75757763-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+  <title>Live Insight Dashboard on Pentaho - Part 3: MQTT, the Message Broker and Data Integration.</title>
+  <meta name="description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+  <meta name="author" content="Miguel Gaspar">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="analytics,big data,iot,social innovation,bi,business intelligence,ctools,pentaho,real-time,realtime,live,insights,analysis,dashboards,artificial intelligence,machine learning'>
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cooking Analytics">
+  <meta name="twitter:description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Cooking Analytics">
+  <meta property="og:description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-194x194.png" sizes="194x194">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/android-chrome-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="/images/favicons/manifest.json">
+  <link rel="shortcut icon" href="/images/favicons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://mfgaspar.github.io//2016/Live-Insights-With-Pentado-and-Ctools-Part-3/">
+  <link rel="alternate" type="application/rss+xml" title="Cooking Analytics" href="/feed.xml">
+</head>
+
+
+  <body>
+    <span class="mobile btn-mobile-menu">
+  <i class="icon icon-list btn-mobile-menu__icon"></i>
+  <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+</span>
+  
+<header class="panel-cover" style="background-image: url(/images/cover.jpg)">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <a href="/" title="link to home of Cooking Analytics">
+          <img src="/images/profile.jpg" class="user-image" alt="My Profile Photo">
+          <h1 class="panel-cover__title panel-title">Cooking Analytics</h1>
+        </a>
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description">My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="link to Cooking Analytics blog" class="blog-button">Blog</a></li>
+            </ul>
+          </nav>
+
+          <nav class="cover-navigation navigation--social">
+            <ul class="navigation">
+          
+            
+              <!-- Twitter -->
+              <li class="navigation__item">
+                <a href="http://twitter.com/migfgaspar" title="@migfgaspar on Twitter" target="_blank">
+                  <i class="icon icon-social-twitter"></i>
+                  <span class="label">Twitter</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- Facebook -->
+              <li class="navigation__item">
+                <a href="http://fb.me/miguel.ferreira.gaspar" title="miguel.ferreira.gaspar on Facebook" target="_blank">
+                  <i class="icon icon-social-facebook"></i>
+                  <span class="label">Facebook</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- LinkedIn -->
+              <li class="navigation__item">
+                <a href="https://www.linkedin.com/in/mfgaspar" title="mfgaspar on LinkedIn" target="_blank">
+                  <i class="icon icon-social-linkedin"></i>
+                  <span class="label">LinkedIn</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- GitHub -->
+              <li class="navigation__item">
+                <a href="https://www.github.com/mfgaspar" title="mfgaspar on GitHub" target="_blank">
+                  <i class="icon icon-social-github"></i>
+                  <span class="label">GitHub</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- Email -->
+              <li class="navigation__item">
+                <a href="mailto:miguel.ferreira.gaspar@gmail.com" title="Email miguel.ferreira.gaspar@gmail.com" target="_blank">
+                  <i class="icon icon-mail"></i>
+                  <span class="label">Email</span>
+                </a>
+              </li>
+            
+
+            <!-- RSS -->
+            <li class="navigation__item">
+              <a href="/feed.xml" title="Subscribe" target="_blank">
+                <i class="icon icon-rss"></i>
+                <span class="label">RSS</span>
+              </a>
+            </li>
+          
+            </ul>
+          </nav>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+      <div class="content-wrapper__inner">
+        <article class="post-container post-container--single">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="20 Oct 2016" class="post-meta__date date">20 Oct 2016</time> &#8226; <span class="post-meta__tags">on <a href="/tags/#Live Insights">Live Insights</a> </span>
+    </div>
+    <h1 class="post-title">Live Insight Dashboard on Pentaho - Part 3: MQTT, the Message Broker and Data Integration.</h1>
+  </header>
+  <section class="post">
+    <p>One of the first steps when developing a IoT solution, when in the development or discovery phases starts, is to get the sensors data and send it somewhere to be processed. Depending on requirements we can go to a message centric or data centric approach.</p>
+
+<h2 id="mqtt-and-the-message-brokers">MQTT and the message Brokers</h2>
+
+<p>When using a message centric approach, there are multiple protocols we can use to send messages with sensor data. In this project I have used MQTT because it’s simple, powerful, easy to use and well adopted by IoT community. As referred in <a href="http://mqtt.org/">MQTT.org</a>, MQTT is “a machine-to-machine (M2M)/”Internet of Things” connectivity protocol. It was designed as an extremely lightweight publish/subscribe messaging transport”. Great part of the IoT Industry/community it’s using MQTT as the protocol to get sensor data. if we take a look to some of the protocols, this is one of the most suitable protocols to get information to one end to another. Not the only, but one of the most used for now.</p>
+
+<p>For this small POC, “Live Insight Dashboard on Pentaho”, initially I have used a “Raspberry Pi” to get sensor that, and it was very easy to send it over messages to an MQTT broker.  The message broker used it’s “Mosquitto”, that implements the MQTT protocol versions and provides a lightweight method of carrying out messaging using a publish/subscribe model, perfect for this POC.</p>
+
+<p>You will get lots of good information about MQTT <a href="http://www.hivemq.com/blog/">here</a>.</p>
+
+<p>As you can see there that MQTT is able to provide Quality of Service (QoS) level is an agreement between sender and receiver of a message regarding the guarantees of delivering a message. There are 3 QoS levels in MQTT:</p>
+
+<ul>
+  <li>At most once (0)</li>
+  <li>At least once (1)</li>
+  <li>Exactly once (2).</li>
+</ul>
+
+<p>From project to project, the requirements can be quite different, you may not need to receive all messages, but you may also have the need to process all data and guarantee that all messages have been delivered. So just need to set up the correct configurations. At the example provide I have used QoS equals to “0”, or “at most once”, and means that I won’t mind to lose some of the messages. Once again that will be related with the requirements.</p>
+
+<p>Also, MQTT has some security options that can be used, even if in my opinion there is yet a lot to do about security.</p>
+
+<p>Since I wanted to be able to share this examples, I couldn’t share my “Rapsberry Pi”, so I just created some PDI transformations that could simulate sensor data, so that anyone could get working without a “Rapsberry Pi” or other hardware besides your PC.</p>
+
+<p>So in reality I was just sending sensor data from PDI to a message broker (Mosquitto) and latter process those messages again in another transformation, in order to do some basic aggregations, statistics or even windowing. Here, you can aslso use PDI and his steps to persist data in a database or whathever you need to do. Once again it depends on requirments and the goals.</p>
+
+<p>To be able to send messages from PDI to the MQTT broker, I have used <a href="http://www.eclipse.org/paho/">PAHO</a>, that provides open-source client implementations of MQTT for many different languages. To send data to kettle, I have used some custom Java code in a UDJC (User Defined Java Class) in PDI. In the meanwhile, and based on some code that was written initially, <strong>Daniel Salgueiral</strong> already contributed with PDI steps (both consumer/producer) to be possible to work with MQTT in PDI, available <a href="https://github.com/danielams/kettle-mqtt-plugin">here</a>. To be honest I haven’t tested them yet, but challenge you to try them and contribute with some code to improve them, or just get feedback to Daniel.</p>
+
+<p>After being processed the messages are delivered to the message broker again, but using a different topic and ready to be consumed by the dashboards or other systems that might want to use the already processed data.</p>
+
+<p>The following diagram show what I was explaining above:
+<img src="http://mfgaspar.github.io/assets/realtime_diagram_2.png" alt="Samples Diagram on Live Insights Dashboard" /></p>
+
+<p>You can also see on the diagram the main transformation using 2 UDJC steps, the first and last steps, one to consume messages and the last one to work as producer, after data being processed. The remaining steps are just steps that will process data according your requirements. In my case and depending in some parameters it can perform different operations, you can even set the name of the sub-transformation to execute, so without many changes you can have this solution working as a gateway. Very useful if your system needs to scale, and useful to make use of different protocols like AMQP or even make use of Kafka, while the communication between devices and gateways is done via MQTT, or any other.</p>
+
+<p>You can check the samples provided in last blog post about the subject <a href="http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-2/">here</a>.</p>
+
+<p>On the frontend, one interesting change of paradigm on the CTools dashboard, is that I am not doing pulls to a database, but instead, data is being pushed into to the dashboard, that refresh’s the visualizations as soon as a message arrives. But this is another story that I will cover in a new blog post, so keep an eye in the blog. Anyhow let give some info in advanced, MQTT has a client library that can be used directly on the browser and inside a CTools dashboard.</p>
+
+<p>Are there any options besides MQTT? Yes, there is a lot of options as also a lot of tools to use in IoT and to produce incredible analytics, once again, it all depend on the requirements.</p>
+
+<p>Follow me at <a href="https://twitter.com/migfgaspar">Twitter</a></p>
+
+
+  </section>
+  
+</article>
+ 
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-571518f68ebfed3f"></script>
+
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/twitter/offer?url=http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-3/&text=&pco=tbxnj-1.0&pubid=&ct=1" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/twitter.png" border="0" alt="Twitter"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/linkedin/offer?url=http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-3/&pubid=&ct=1&summary=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/linkedin.png" border="0" alt="LinkedIn"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/facebook/offer?url=http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-3/&pubid=&ct=1&title=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/facebook.png" border="0" alt="Facebook"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/google_plus_one/offer?url=http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-3/&pubid=&ct=1&title=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/google_plusone_share.png" border="0" alt="Google+"/></a>
+<!--
+<a href="https://api.addthis.com/oexchange/0.8/forward/link/offer?url=http%3A%2F%2Fwww.addthis.com&pubid=ra-571518f68ebfed3f&ct=1&title=AddThis%20-%20Get%20likes%2C%20get%20shares%2C%20get%20followers&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/link.png" border="0" alt="Copy Link"/></a>
+-->
+
+<div id="disqus_thread"></div>
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//cookinganalytics.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+      </div>
+
+      <footer class="footer">
+  <span class="footer__copyright">&copy; 2017 Miguel Gaspar. All rights reserved.</span>
+</footer> 
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75757763-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+    </div>
+  </body>
+</html>

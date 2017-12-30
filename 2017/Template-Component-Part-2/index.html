@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-75757763-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+  <title>Template Component - Part 2: The use of formatters</title>
+  <meta name="description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+  <meta name="author" content="Miguel Gaspar">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="keywords" content="analytics,big data,iot,social innovation,bi,business intelligence,ctools,pentaho,real-time,realtime,live,insights,analysis,dashboards,artificial intelligence,machine learning'>
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Cooking Analytics">
+  <meta name="twitter:description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Cooking Analytics">
+  <meta property="og:description" content="My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. ">
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-194x194.png" sizes="194x194">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/images/favicons/android-chrome-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/images/favicons/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="/images/favicons/manifest.json">
+  <link rel="shortcut icon" href="/images/favicons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="msapplication-TileImage" content="/images/favicons/mstile-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://mfgaspar.github.io//2017/Template-Component-Part-2/">
+  <link rel="alternate" type="application/rss+xml" title="Cooking Analytics" href="/feed.xml">
+</head>
+
+
+  <body>
+    <span class="mobile btn-mobile-menu">
+  <i class="icon icon-list btn-mobile-menu__icon"></i>
+  <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+</span>
+  
+<header class="panel-cover" style="background-image: url(/images/cover.jpg)">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+        <a href="/" title="link to home of Cooking Analytics">
+          <img src="/images/profile.jpg" class="user-image" alt="My Profile Photo">
+          <h1 class="panel-cover__title panel-title">Cooking Analytics</h1>
+        </a>
+        <hr class="panel-cover__divider">
+        <p class="panel-cover__description">My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary">
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="link to Cooking Analytics blog" class="blog-button">Blog</a></li>
+            </ul>
+          </nav>
+
+          <nav class="cover-navigation navigation--social">
+            <ul class="navigation">
+          
+            
+              <!-- Twitter -->
+              <li class="navigation__item">
+                <a href="http://twitter.com/migfgaspar" title="@migfgaspar on Twitter" target="_blank">
+                  <i class="icon icon-social-twitter"></i>
+                  <span class="label">Twitter</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- Facebook -->
+              <li class="navigation__item">
+                <a href="http://fb.me/miguel.ferreira.gaspar" title="miguel.ferreira.gaspar on Facebook" target="_blank">
+                  <i class="icon icon-social-facebook"></i>
+                  <span class="label">Facebook</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- LinkedIn -->
+              <li class="navigation__item">
+                <a href="https://www.linkedin.com/in/mfgaspar" title="mfgaspar on LinkedIn" target="_blank">
+                  <i class="icon icon-social-linkedin"></i>
+                  <span class="label">LinkedIn</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- GitHub -->
+              <li class="navigation__item">
+                <a href="https://www.github.com/mfgaspar" title="mfgaspar on GitHub" target="_blank">
+                  <i class="icon icon-social-github"></i>
+                  <span class="label">GitHub</span>
+                </a>
+              </li>
+            
+
+            
+              <!-- Email -->
+              <li class="navigation__item">
+                <a href="mailto:miguel.ferreira.gaspar@gmail.com" title="Email miguel.ferreira.gaspar@gmail.com" target="_blank">
+                  <i class="icon icon-mail"></i>
+                  <span class="label">Email</span>
+                </a>
+              </li>
+            
+
+            <!-- RSS -->
+            <li class="navigation__item">
+              <a href="/feed.xml" title="Subscribe" target="_blank">
+                <i class="icon icon-rss"></i>
+                <span class="label">RSS</span>
+              </a>
+            </li>
+          
+            </ul>
+          </nav>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+      <div class="content-wrapper__inner">
+        <article class="post-container post-container--single">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="30 Dec 2017" class="post-meta__date date">30 Dec 2017</time> &#8226; <span class="post-meta__tags">on <a href="/tags/#Pentaho">Pentaho</a> <a href="/tags/#CTools">CTools</a> <a href="/tags/#Components">Components</a> <a href="/tags/#Template Component">Template Component</a> </span>
+    </div>
+    <h1 class="post-title">Template Component - Part 2: The use of formatters</h1>
+  </header>
+  <section class="post">
+    <p>The template component is a very powerful component, you will always need to write at least one JavaScript function, to return back to the component the template you want to use. In future, we need to consider a way to reuse templates without copy/paste the code.</p>
+
+<p>To get familiar with the earlier post I wrote on this subject, please refer to the following links:</p>
+
+<ul>
+  <li><a href="http://mfgaspar.github.io/2017/Template-Component-Part-1/">Template Component - Part 1: The concept and basic usage</a></li>
+</ul>
+
+<p>This post will cover the formatters. The template component has the concept of formatters, which are functions that we can define on the component and later use them inside the template. The values can be numeric, date or string.</p>
+
+<p>Formatters are very useful because, most of the time, we can’t get the value formatted from the query, as we want it to be displayed on the dashboard. Let’s suppose you want your values to use always 2 decimal places, but from the query you are getting more decimal places then you need.</p>
+
+<p>The way to use them, is done in two steps:</p>
+
+<ol>
+  <li>Define the formatter function in the formatters property of the component</li>
+  <li>Use the function on the template, so that it can be called when the template is being rendered</li>
+</ol>
+
+<p>Let’s see each of the steps in more details:</p>
+
+<p><strong>STEP 1:</strong> 
+You need to go to the formatters property of the template component and add a new formatter, by setting its name and the JavaScript function that accepts a “value” and “id” as arguments. Let’s suppose we want to transform a number and show the dollar sign, and we want to use the function in 2 different places, the 1st using 1 decimal place and the second using 2 decimal places. In this case we want to use the same function and name, and the id can be used to make the distinction between the use of 1 or 0 decimal places.</p>
+
+<ul>
+  <li>The value, it’s a mandatory argument, will be the value we want to format.</li>
+  <li>The id, it’s an optional argument, can be used for conditional formatting. If we pass 1, then we will return the value with 1 decimal place, 2 decimal places otherwise.</li>
+</ul>
+
+<p>One example without the use of the id would be as:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>	
+  <span class="k">return</span> <span class="nx">Utils</span><span class="p">.</span><span class="nx">numberFormat</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="s1">'$0.0a'</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>One example with the id would be as follows:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">id</span><span class="p">){</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>	
+    <span class="k">return</span> <span class="nx">Utils</span><span class="p">.</span><span class="nx">numberFormat</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="s1">'$0.0a'</span><span class="p">)</span>
+  <span class="k">else</span>
+    <span class="k">return</span> <span class="nx">Utils</span><span class="p">.</span><span class="nx">numberFormat</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="s1">'$0.00a'</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><strong>TIP: We can use the id as an option, suppose you have different signs you want to use, you cn then pass the signs as the argument in the id.</strong></p>
+
+<p><strong>STEP 2:</strong>
+The second step is to make use of the formatter function inside the template we want to use. Let’s suppose we called the formatter “monetary”. The way to invoke the formatter by calling the function. The syntax is different between Mustache and Underscore, we will focus on the syntax for Mustache. The formatter can be invoked by using  <strong>{{ value | formatter | “formatter_name” : id }}</strong>, where we can find the following arguments:</p>
+
+<ul>
+  <li><strong>value</strong>: the value to be formatted</li>
+  <li><strong>formatter</strong>: it indicates that we want to apply formatters. Another option would be addins, that we will cover in another blog post</li>
+  <li><strong>formatter_name</strong>: the formatter name used in the previous step. The name should be set between double quotes</li>
+  <li><strong>id</strong>: some option to pass to the addin, like the id of a specific formatter</li>
+</ul>
+
+<p>In the example, we have been working on, the template would be as:</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
+  <span class="kd">var</span> <span class="nx">template</span> <span class="o">=</span>  <span class="s1">''</span> <span class="o">+</span>
+    <span class="s1">'&lt;ul&gt;'</span> <span class="o">+</span>
+    <span class="s1">'{{#items}}'</span> <span class="o">+</span>
+    <span class="s1">'&lt;li&gt; 0: 1 &lt;/li&gt;'</span><span class="o">+</span>
+    <span class="s1">'{{/items}}'</span> <span class="o">+</span>
+    <span class="s1">'&lt;/ul&gt;'</span><span class="p">;</span> 
+  <span class="k">return</span> <span class="nx">template</span><span class="p">;</span>
+<span class="p">}</span> 
+</code></pre></div></div>
+<p>So, we can see that the vale we want to pass is the value in the second column (column #1), indication that we want to use a formatter, the formatter name as “monetary” and the number of decimal places to use.</p>
+
+<p>There are many use cases you can think of to use the formatters. They will save you lots of code or work on the queries, that sometimes we are not able to perform.</p>
+
+<p>Please refer to the Book <a href="https://www.packtpub.com/big-data-and-business-intelligence/learning-pentaho-ctools">Learning Pentaho CTools</a> to get more details.</p>
+
+<p>Follow me at <a href="https://twitter.com/migfgaspar">Twitter</a></p>
+
+
+  </section>
+  
+</article>
+ 
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-571518f68ebfed3f"></script>
+
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/twitter/offer?url=http://mfgaspar.github.io/2017/Template-Component-Part-2/&text=&pco=tbxnj-1.0&pubid=&ct=1" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/twitter.png" border="0" alt="Twitter"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/linkedin/offer?url=http://mfgaspar.github.io/2017/Template-Component-Part-2/&pubid=&ct=1&summary=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/linkedin.png" border="0" alt="LinkedIn"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/facebook/offer?url=http://mfgaspar.github.io/2017/Template-Component-Part-2/&pubid=&ct=1&title=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/facebook.png" border="0" alt="Facebook"/></a>
+
+<a href="https://api.addthis.com/oexchange/0.8/forward/google_plus_one/offer?url=http://mfgaspar.github.io/2017/Template-Component-Part-2/&pubid=&ct=1&title=&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/google_plusone_share.png" border="0" alt="Google+"/></a>
+<!--
+<a href="https://api.addthis.com/oexchange/0.8/forward/link/offer?url=http%3A%2F%2Fwww.addthis.com&pubid=ra-571518f68ebfed3f&ct=1&title=AddThis%20-%20Get%20likes%2C%20get%20shares%2C%20get%20followers&pco=tbxnj-1.0" target="_blank"><img src="https://cache.addthiscdn.com/icons/v3/thumbs/32x32/link.png" border="0" alt="Copy Link"/></a>
+-->
+
+<div id="disqus_thread"></div>
+<script>
+/**
+* RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+* LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+*/
+/*
+var disqus_config = function () {
+this.page.url = PAGE_URL; // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = '//cookinganalytics.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+
+
+      </div>
+
+      <footer class="footer">
+  <span class="footer__copyright">&copy; 2017 Miguel Gaspar. All rights reserved.</span>
+</footer> 
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-75757763-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+    </div>
+  </body>
+</html>

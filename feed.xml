@@ -1,30 +1,957 @@
----
-layout: null
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ site.title | xml_escape }}</title>
-    <description>{{ site.description | xml_escape }}</description>
-    <link>{{ site.url }}{{ site.baseurl }}/</link>
-    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml" />
-    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
-    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
-    <generator>Jekyll v{{ jekyll.version }}</generator>
-    {% for post in site.posts limit:10 %}
+    <title>Cooking Analytics</title>
+    <description>My name is Miguel Gaspar and the blog purpose is to provide information on the value and how to build IoT and Big Data solutions, providing business, architectural and technical guidance that can be useful to developers, architects and top level business managers. </description>
+    <link>http://mfgaspar.github.io//</link>
+    <atom:link href="http://mfgaspar.github.io//feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Sat, 30 Dec 2017 19:23:35 +0000</pubDate>
+    <lastBuildDate>Sat, 30 Dec 2017 19:23:35 +0000</lastBuildDate>
+    <generator>Jekyll v3.6.2</generator>
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.content | xml_escape }}</description>
-        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
-        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
-        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
-        {% for tag in post.tags %}
-        <category>{{ tag | xml_escape }}</category>
-        {% endfor %}
-        {% for cat in post.categories %}
-        <category>{{ cat | xml_escape }}</category>
-        {% endfor %}
+        <title>Template Component - Part 2: The use of formatters</title>
+        <description>&lt;p&gt;The template component is a very powerful component, you will always need to write at least one JavaScript function, to return back to the component the template you want to use. In future, we need to consider a way to reuse templates without copy/paste the code.&lt;/p&gt;
+
+&lt;p&gt;To get familiar with the earlier post I wrote on this subject, please refer to the following links:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://mfgaspar.github.io/2017/Template-Component-Part-1/&quot;&gt;Template Component - Part 1: The concept and basic usage&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This post will cover the formatters. The template component has the concept of formatters, which are functions that we can define on the component and later use them inside the template. The values can be numeric, date or string.&lt;/p&gt;
+
+&lt;p&gt;Formatters are very useful because, most of the time, we can’t get the value formatted from the query, as we want it to be displayed on the dashboard. Let’s suppose you want your values to use always 2 decimal places, but from the query you are getting more decimal places then you need.&lt;/p&gt;
+
+&lt;p&gt;The way to use them, is done in two steps:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Define the formatter function in the formatters property of the component&lt;/li&gt;
+  &lt;li&gt;Use the function on the template, so that it can be called when the template is being rendered&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Let’s see each of the steps in more details:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;STEP 1:&lt;/strong&gt; 
+You need to go to the formatters property of the template component and add a new formatter, by setting its name and the JavaScript function that accepts a “value” and “id” as arguments. Let’s suppose we want to transform a number and show the dollar sign, and we want to use the function in 2 different places, the 1st using 1 decimal place and the second using 2 decimal places. In this case we want to use the same function and name, and the id can be used to make the distinction between the use of 1 or 0 decimal places.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The value, it’s a mandatory argument, will be the value we want to format.&lt;/li&gt;
+  &lt;li&gt;The id, it’s an optional argument, can be used for conditional formatting. If we pass 1, then we will return the value with 1 decimal place, 2 decimal places otherwise.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;One example without the use of the id would be as:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;	
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Utils&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;numberFormat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'$0.0a'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;One example with the id would be as follows:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;	
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Utils&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;numberFormat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'$0.0a'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Utils&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;numberFormat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'$0.00a'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;TIP: We can use the id as an option, suppose you have different signs you want to use, you cn then pass the signs as the argument in the id.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;STEP 2:&lt;/strong&gt;
+The second step is to make use of the formatter function inside the template we want to use. Let’s suppose we called the formatter “monetary”. The way to invoke the formatter by calling the function. The syntax is different between Mustache and Underscore, we will focus on the syntax for Mustache. The formatter can be invoked by using  &lt;strong&gt;{{ value | formatter | “formatter_name” : id }}&lt;/strong&gt;, where we can find the following arguments:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;value&lt;/strong&gt;: the value to be formatted&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;formatter&lt;/strong&gt;: it indicates that we want to apply formatters. Another option would be addins, that we will cover in another blog post&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;formatter_name&lt;/strong&gt;: the formatter name used in the previous step. The name should be set between double quotes&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;id&lt;/strong&gt;: some option to pass to the addin, like the id of a specific formatter&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In the example, we have been working on, the template would be as:&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;template&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'&amp;lt;ul&amp;gt;'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'{{#items}}'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'&amp;lt;li&amp;gt; 0: 1 &amp;lt;/li&amp;gt;'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'{{/items}}'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'&amp;lt;/ul&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;So, we can see that the vale we want to pass is the value in the second column (column #1), indication that we want to use a formatter, the formatter name as “monetary” and the number of decimal places to use.&lt;/p&gt;
+
+&lt;p&gt;There are many use cases you can think of to use the formatters. They will save you lots of code or work on the queries, that sometimes we are not able to perform.&lt;/p&gt;
+
+&lt;p&gt;Please refer to the Book &lt;a href=&quot;https://www.packtpub.com/big-data-and-business-intelligence/learning-pentaho-ctools&quot;&gt;Learning Pentaho CTools&lt;/a&gt; to get more details.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 30 Dec 2017 08:00:00 +0000</pubDate>
+        <link>http://mfgaspar.github.io//2017/Template-Component-Part-2/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2017/Template-Component-Part-2/</guid>
+        
+        <category>Pentaho</category>
+        
+        <category>CTools</category>
+        
+        <category>Components</category>
+        
+        <category>Template Component</category>
+        
+        
+        <category>Pentaho</category>
+        
+        <category>CTools</category>
+        
+        <category>Components</category>
+        
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>Template Component - Part 1: The concept and basic usage</title>
+        <description>&lt;p&gt;Most people haven’t realized that there is a component named “Template Component” in CTools or just don’t know how to use it, most because they haven’t read the Book &lt;a href=&quot;https://www.packtpub.com/big-data-and-business-intelligence/learning-pentaho-ctools&quot;&gt;Learning Pentaho CTools&lt;/a&gt;. Let me give all a brief overview on how it works.&lt;/p&gt;
+
+&lt;p&gt;More than once I have done a project where it would be good to be able the define the elements I wanted to display on my dashboards to present the data coming from a CDA data source. The existing components are based on pre-built visualizations like a table, a line chart, a bar chart, a drop-down, but I was trying to go further than that. Doing the same code for different dashboards, I thought it was about time to create a new component that would allow us to define the HTML to use when bringing information into the dashboard. We could always use the query component to your dashboard, but much more code would be required, so when you think you don’t have the visualization you expected, don’t worry, most probably you can use the template component.&lt;/p&gt;
+
+&lt;p&gt;The following image is an example of using all of the out-of-the-box functionality that the components provides.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mfgaspar.github.io/assets/template_component_1.png&quot; alt=&quot;Example of visualization using the Template Component&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;First of all, you need to understand the concept of templates. Usually there are terms associated, model and view, where you can understand the model as  the data you have to be displayed and the view the way you want to have displayed. It’s not the purpose of this blog post to get into the details, but, you can find more information on the links in the next sentence. For now, there are 2 templates engines we can use: &lt;a href=&quot;https:// github.com/janl/mustache.js&quot;&gt;Mustache&lt;/a&gt; and  &lt;a href=&quot;http://underscorejs.org/#template&quot;&gt;Underscore&lt;/a&gt; templates.&lt;/p&gt;
+
+&lt;p&gt;You must select the type of template you want to use. You just need to go to the properties of the component and change the “Template Library” property. Note that the default engine is &lt;strong&gt;“Underscore”&lt;/strong&gt;. In this blog post series we will use &lt;strong&gt;“Mustache”&lt;/strong&gt;, so you need to change the selected engine on the component properties.&lt;/p&gt;
+
+&lt;p&gt;One of the best examples where to use the template component is when you have multiple elements you want to repeat, based on how many lines you got on the result of the execution of a specific query.&lt;/p&gt;
+
+&lt;p&gt;So, let’s keep it very simple and consider you wanted to display something like:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;APAC: $1281705.9&lt;/li&gt;
+  &lt;li&gt;EMEA: $5008224.3&lt;/li&gt;
+  &lt;li&gt;Japan: $503957.6&lt;/li&gt;
+  &lt;li&gt;NA: $3852061.4&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The html in your webpage/dashboard would look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;ul&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt;EMEA: $168479&lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt;APAC: $601606&lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt;Japan: $168479&lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt;NA: $1821247&lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/ul&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We can see that there are elements that are repeated. The &amp;lt;li&amp;gt; html element is showed multiple time, just changing what’s inside of each element in the list.&lt;/p&gt;
+
+&lt;p&gt;Let’s suppose, that the result of your query is something like, where column #0 is the name of the territory and column #1 is the sales value for that territory. Just like in the following table.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;| Territory | Sales     | 
+|-----------|-----------|
+| EMEA      |  168479   |
+| APAC      |  601606   |
+| Japan     |  168479   |
+| NA        |  1821247  |
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So if using Mustache, you can build a template like:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;ul&amp;gt;&lt;/span&gt;
+  {{#items}}
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;li&amp;gt;&lt;/span&gt;{{0}}: ${{1}}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/li&amp;gt;&lt;/span&gt;
+  {{/items}}
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/ul&amp;gt;&lt;/span&gt;  
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The Mustache engine, will use this template and render the data using the template that is defined. So for each item or territory, it will create a &amp;lt;li&amp;gt; element with the respective name and sales value. We can see &lt;strong&gt;{{0}}&lt;/strong&gt; and &lt;strong&gt;{{1}}&lt;/strong&gt;, where we are referring to the result of the first and second column. By default, the template component uses the index of the column as the reference to get the value we want o display. By using the Model Handler, discussion for another post, we will see how we can change and use more friendly names.&lt;/p&gt;
+
+&lt;p&gt;To use the template component, just add he template component to the dashboard and set the “name”, the “datasource” and the “htmlObject”. Then, set the template by writing a small JavaScript function with the code below, that just returns the template we want to use.&lt;/p&gt;
+
+&lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;template&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;''&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'&amp;lt;ul&amp;gt;'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'{{#items}}'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'&amp;lt;li&amp;gt; 0: $1 &amp;lt;/li&amp;gt;'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'{{/items}}'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;'&amp;lt;/ul&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This functionality, just by itself, it was not enough to me, being able to create templates but being required to build complex templates. I also wanted to make the component somehow flexible that we could use addins, just like we can do it on the table component. If you do not know what I am talking about take a look at &lt;a href=&quot;http://pedroalves-bi.blogspot.pt/2011/12/introducing-add-ins-in-ctools.html&quot;&gt;this&lt;/a&gt; blog post from Pedro Alves.&lt;/p&gt;
+
+&lt;p&gt;Another great functionality in the template component is that it allows you to apply formatting or even event handling in a very easy way, even if you need to write some lines of JavaScript code.&lt;/p&gt;
+
+&lt;p&gt;The blog post would get too big if I tried to cover all these options, so I will write a couple more posts on this topic, and how to use more advanced option of the Template Component, like using the addins, or even creating your own addin.&lt;/p&gt;
+
+&lt;p&gt;The template component is a component that allows us to create custom visualizations based on templates and models, all based on the data that we have acquired from a data source.&lt;/p&gt;
+
+&lt;p&gt;The template component is a component that allows us to create custom visualizations based on templates and models, all based on the data that we have acquired from a data source.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TIP:&lt;/strong&gt;
+Don’t forget that we use Twitter Bootstrap framework, so you can also use it when defining your templates.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 29 Dec 2017 08:00:00 +0000</pubDate>
+        <link>http://mfgaspar.github.io//2017/Template-Component-Part-1/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2017/Template-Component-Part-1/</guid>
+        
+        <category>Pentaho</category>
+        
+        <category>CTools</category>
+        
+        <category>Components</category>
+        
+        <category>Template Component</category>
+        
+        
+        <category>Pentaho</category>
+        
+        <category>CTools</category>
+        
+        <category>Components</category>
+        
+      </item>
+    
+      <item>
+        <title>Update to Realtime dashboard and PDI transformation sample using MQTT</title>
+        <description>&lt;p&gt;The posts also show how we can perform data streaming in PDI, by using non-ending transformations (and don’t try to do it with jobs, at least not for now).&lt;/p&gt;
+
+&lt;p&gt;Here are the links:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-1/&quot;&gt;Live Insight Dashboard on Pentaho - Part 1: Introduction&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-2/&quot;&gt;Live Insight Dashboard on Pentaho - Part 2: High level overview&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-3/&quot;&gt;Live Insight Dashboard on Pentaho - Part 3: MQTT, the Message Broker and Data Integration&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;More than 1 year ago I have released a series of blog posts about a real-time dashboard using CTools and MQTT protocol. This covers how we could build a real-time dashboard for IoT showing real-time sensor data in a CTools dashboard.&lt;/p&gt;
+
+&lt;p&gt;The posts also show how we can perform data streaming in PDI, by using non-ending transformations (and don’t try to do it with jobs, at least not for now).&lt;/p&gt;
+
+&lt;p&gt;Here are the links:&lt;/p&gt;
+
+&lt;p&gt;Live Insight Dashboard on Pentaho - Part 1: Introduction
+Live Insight Dashboard on Pentaho - Part 2: High level overview
+Live Insight Dashboard on Pentaho - Part 3: MQTT, the Message Broker and Data Integration.
+The samples I’ve created were using some custom code on PDI, but in the meanwhile, Pentaho Labs released MQTT steps on marketplace.&lt;/p&gt;
+
+&lt;p&gt;I have updated my samples to use the MQTT steps in Pentaho Marketplace, and also updated the libraries used of the frontend. The samples are simpler to execute since I am now using a public MQTT broker.&lt;/p&gt;
+
+&lt;p&gt;You can download them from the &lt;a href=&quot;https://github.com/mfgaspar/mfgaspar.github.io-samples/tree/master/pentaho/mqtt.project.source.code&quot;&gt;link&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Instruction to get them working:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Download the files;&lt;/li&gt;
+  &lt;li&gt;Run iot-device-emulator.ktr and streaming-using-mqtt.ktr kettle transformations available inside the backend folder;&lt;/li&gt;
+  &lt;li&gt;Upload the files inside frontend folder to your Pentaho server;&lt;/li&gt;
+  &lt;li&gt;Run the CTools dashboard.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;At this point, you should be able to see the charts and map being updated automatically without any pull request. All data is pushed directly from Pentaho Data Integration and the broker using the MQTT protocol.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;More than 1 year ago I have released a series of blog posts about a real-time dashboard using CTools and MQTT protocol. This covers how we could build a real-time dashboard for IoT showing real-time sensor data in a CTools dashboard.&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 12 Oct 2017 09:59:00 +0100</pubDate>
+        <link>http://mfgaspar.github.io//2017/Update-to-realtime-dashboard-samples-using-MQTT/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2017/Update-to-realtime-dashboard-samples-using-MQTT/</guid>
+        
+        <category>Realtime</category>
+        
+        <category>MQTT</category>
+        
+        <category>CTools</category>
+        
+        <category>Pentaho</category>
+        
+        <category>PDI</category>
+        
+        <category>Data Integration</category>
+        
+        <category>Streaming</category>
+        
+        <category>IoT</category>
+        
+        <category>MQTT</category>
+        
+        
+        <category>Realtime</category>
+        
+        <category>MQTT</category>
+        
+        <category>CTools</category>
+        
+        <category>Pentaho</category>
+        
+        <category>PDI</category>
+        
+        <category>Data Integration</category>
+        
+        <category>Streaming</category>
+        
+        <category>IoT</category>
+        
+      </item>
+    
+      <item>
+        <title>Logging user authentication events</title>
+        <description>&lt;p&gt;When we want to enable security logging, we need to follow the instructions in here. It happens that when we do this the log messages are so many that we get lost in so many messages that we almost need log analysis tools. If we just want to grab some of the events there is not too much we can do, except writing a small peace of code, or use the one I wrote.&lt;/p&gt;
+
+&lt;p&gt;Pentaho uses Spring Security, that comes with application listeners and allows us to grab some events and log to output file as we need. So, given that was not the first time I saw this requests from Pentaho users, I decided to extend Pentaho code.&lt;/p&gt;
+
+&lt;p&gt;The code does not change any of the code, neither does require any compilation of Pentaho code. We just need apply some beans configurations to extend functionality.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1)&lt;/strong&gt; First, we need to add the following line in file: &lt;strong&gt;…pentaho-server/pentaho-solutions/system/pentaho-spring-beans.xml&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resource=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;applicationContext-pentaho-security.custom-user-authenticate-events.xml&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2)&lt;/strong&gt; Next step is to set the properties that will dictate the behavior in the code, and what should be logged. Add the following lines to the file: &lt;strong&gt;…pentaho-server/pentaho-solutions/system/applicationContext-pentaho-security.custom-user-authenticate-events.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:util=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/util&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:pen=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.pentaho.com/schema/pentaho-system&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd http://www.pentaho.com/schema/pentaho-system http://www.pentaho.com/schema/pentaho-system.xsd&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;default-lazy-init=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;loggerListener&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;io.github.mfgaspar.pentaho.authentication.events.loggerListener&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;scope=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;singleton&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;enablePentahoLoggerListener&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;enableNoAuthenticationEvents&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;enableBadCredentialEvents&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;enableSessionCreatedEvents&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;enableSessionDestroyedEvents&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;true&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;enableTraceServletEvents&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;enableTraceOtherEvents&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;messageTemplate&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;(%s|%s|%s|%s)&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;noAuthenticationEventsId&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;NO-AUTHENTICATION&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;badCredentialEventsId&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;AUTHENTICATION-FAILED&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sessionCreatedEventsId&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SESSION-START&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sessionDestroyedEventsId&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SESSION-END&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3)&lt;/strong&gt; The value of the properties can be set to define what will be logged into the log file. Note that you don’t really need to change them, or set them. The available properties are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;enableNoAuthenticationEvents&lt;/strong&gt;: Set it to true will log some events, when a user requests a resource without authentication. Default value is true&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;enableBadCredentialEvents&lt;/strong&gt;: Set it true to log informations about failed login attempts. Default value is true&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;enableSessionCreatedEvents&lt;/strong&gt;: Set it to true to log information when user logs in (session is created for user). Default value is true&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;enableSessionDestroyedEvents&lt;/strong&gt;: Set it to true to log information when user logs out or session expired (session is destroyed). Default value is true&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;enableTraceServletEvents&lt;/strong&gt;: Set it to true when you want servlet events to be logged (log level in log4j should be set to TRACE). Default value is false&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;enableTraceOtherEvents&lt;/strong&gt;: Set it to true when you want all other events logged in file. Should be used only for debugging (log level in log4j should be set to TRACE). Default value is false&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;messageTemplate&lt;/strong&gt;: Sets the format of the message to be send to log file, used for the folowing events: NoAuthenticationEvents, BadCredentialEvents, SessionCreatedEvents and SessionDetroyedEvents. The message will include the Event ID, the IP address of remote host, the Username and de Session ID. Default message format is &lt;code class=&quot;highlighter-rouge&quot;&gt;(%s|%s|%s|%s)&lt;/code&gt;. You can check the syntax in here&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;noAuthenticationEventsId&lt;/strong&gt;: Sets the event ID that will identify the event on the log file. Default value is “NO-AUTHENTICATION”&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;badCredentialEventsId&lt;/strong&gt;: Sets the event ID that will identify the event on the log file. Default value is “AUTHENTICATION-FAILED”&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;sessionCreatedEventsId&lt;/strong&gt;: Sets the event ID that will identify the event on the log file. Default value is “SESSION-START”&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;sessionDestroyedventsId&lt;/strong&gt;: Sets the event ID that will identify the event on the log file. Default value is “SESSION-END”&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4)&lt;/strong&gt; You also need to add the folowing lines into: &lt;strong&gt;…/pentaho-server/tomcat/webapps/pentaho/classes/log4j.xml&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;    &lt;span class=&quot;nt&quot;&gt;&amp;lt;log4j:configuration&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns:log4j=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://jakarta.apache.org/log4j/&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;debug=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;AUTHENTICATELOG&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.apache.log4j.RollingFileAppender&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;param&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;File&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;../logs/authenticate_events.log&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;param&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Append&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;false&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;param&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;MaxFileSize&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;500KB&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;param&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;MaxBackupIndex&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;layout&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.apache.log4j.PatternLayout&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+                &lt;span class=&quot;nt&quot;&gt;&amp;lt;param&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ConversionPattern&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%d %-5p [%c] %m%n&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;/layout&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/appender&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;category&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;...&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;priority&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;INFO&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span class=&quot;nt&quot;&gt;&amp;lt;appender-ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;AUTHENTICATELOG&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;/category&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/log4j:configuration&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5)&lt;/strong&gt; Place this jar file in &lt;strong&gt;…/pentaho-server/tomcat/webapps/pentaho/WEB-INF/lib&lt;/strong&gt; folder. Source code is available here.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 6)&lt;/strong&gt; Restart te server. Once the users starts to login, logout or even failing to authenticate, the file &lt;strong&gt;…/pentaho-server/tomcat/logs/authenticate_events.log&lt;/strong&gt; will start to be populated. The following lines are an example of the output.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;2017-10-09 04:37:26,696 INFO  [...] (NO-AUTHENTICATION|0:0:0:0:0:0:0:1|anonymousUser|905E6FADA39FE79B23E48C01190776C8)
+2017-10-09 04:37:43,715 INFO  [...] (SESSION-START|0:0:0:0:0:0:0:1|admin|905E6FADA39FE79B23E48C01190776C8)
+2017-10-09 04:44:13,051 INFO  [...] (NO-AUTHENTICATION|192.168.56.1|anonymousUser|661BE4C2563FFEA09BB80E300579490F)
+2017-10-09 04:44:15,216 INFO  [...] (SESSION-START|192.168.56.1|admin|661BE4C2563FFEA09BB80E300579490F)
+2017-10-09 04:44:23,479 INFO  [...] (SESSION-END|192.168.56.1|admin|661BE4C2563FFEA09BB80E300579490F)
+2017-10-09 04:44:23,575 INFO  [...] (NO-AUTHENTICATION|192.168.56.1|anonymousUser|833B9C0DE7490AECFB36EB04940C4339)
+2017-10-09 04:44:31,121 INFO  [...] (NO-AUTHENTICATION|192.168.56.1|anonymousUser|23BD39EB76D0D973AD867CB92CF1E916)
+2017-10-09 04:44:38,975 INFO  [...] (AUTHENTICATION-FAILED|192.168.56.1|suzy|23BD39EB76D0D973AD867CB92CF1E916)
+2017-10-09 04:44:44,160 INFO  [...] (SESSION-START|192.168.56.1|suzy|23BD39EB76D0D973AD867CB92CF1E916)
+2017-10-09 04:44:51,137 INFO  [...] (SESSION-END|192.168.56.1|suzy|23BD39EB76D0D973AD867CB92CF1E916)
+2017-10-09 04:44:51,155 INFO  [...] (NO-AUTHENTICATION|192.168.56.1|anonymousUser|5A7E00C559286B545690AB88197D997F)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;All files available &lt;a href=&quot;https://github.com/mfgaspar/mfgaspar.github.io-samples/tree/master/pentaho/security.events.authenticate/artifacts&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 09 Oct 2017 09:59:00 +0100</pubDate>
+        <link>http://mfgaspar.github.io//2017/Logging-user-authentication-events/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2017/Logging-user-authentication-events/</guid>
+        
+        <category>Security</category>
+        
+        <category>Logging</category>
+        
+        
+        <category>Security</category>
+        
+        <category>Logging</category>
+        
+      </item>
+    
+      <item>
+        <title>IoT on Pentaho using MQTT - New MQTT steps for PDI are available in Marketplace</title>
+        <description>&lt;p&gt;Earlier this year I have made some posts and provided some samples on how we could stream data from the IoT devices and displaying the info on a dashboard, using Pentaho Data Integration and MQTT protocol.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-1/&quot;&gt;First blog post&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-2/&quot;&gt;Second blog post&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-3/&quot;&gt;Third blog post&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I am still missing some blog posts on how to scale a solution on this and how to use D3.js as the chart library, among other updates. The good news is that Pentaho Labs announced the release of MQTT steps, even if not yet supported. I guess it is just a matter of time now.&lt;/p&gt;
+
+&lt;p&gt;The steps are ready to be used and available in marketplace.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://www.pentaho.com/blog/pentaho-mqtt-iot&quot;&gt;Here the link&lt;/a&gt; where Pentaho labs is announcing it.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mfgaspar.github.io/assets/new-mqtt-plugin-pdi.png&quot; alt=&quot;MQTT on PDI&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can watch the &lt;a href=&quot;http://www.youtube.com/watch?v=q4gspdUhlU4&quot;&gt;video&lt;/a&gt; with the updates.&lt;/p&gt;
+
+&lt;p&gt;Samples are available &lt;a href=&quot;https://github.com/mfgaspar/mfgaspar.github.io-samples/tree/master/pentaho/iot.pdi.mqtt.samples&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Please keep in mind that the most interesting part is not the live dashboard, it is the data streaming capabilities on PDI. You can nos make use of the new steps to be closer to IoT and possible to use Data Integration for the ingestion of data coming from devices. This also makes clear tht might be possible to use other protocols.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mfgaspar.github.io/assets/row-processing-transformation.png&quot; alt=&quot;Main and row processing transformations&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;One clear advantage is that you don’t need to write all your code, you can build a gateway using PDI and without writing one line of code. Also look at the samples, you will notice we can switch the data processing transformation we want to use, and you can do it using a parameters. Also from the image above you can see that you are able to group rows based on number of rows or time.&lt;/p&gt;
+
+&lt;p&gt;Also notice that the case, based on the values opf a parameter named “rowsGroupingType” will decide if we need to go and process rows based of the number, based on time, or not group them at all.&lt;/p&gt;
+
+&lt;p&gt;Usefull also if you write to a permanent storage, like Cassandra/HBase or other depending on golas and requirments.&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 16 Dec 2016 12:00:00 +0000</pubDate>
+        <link>http://mfgaspar.github.io//2016/IoT-on-Pentaho-Data-Integration-using-MQTT-steps/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2016/IoT-on-Pentaho-Data-Integration-using-MQTT-steps/</guid>
+        
+        <category>IoT</category>
+        
+        <category>MQTT</category>
+        
+        
+        <category>IoT</category>
+        
+        <category>MQTT</category>
+        
+      </item>
+    
+      <item>
+        <title>Startup Actions on Pentaho: PentahoHttpSession VS UserSession</title>
+        <description>&lt;p&gt;There might be easier ways to deal with some actions that you need to execute during the user login or during the start of the server itself, anyhow action sequences are still very usefull. For sure you already know about te content of this post, anyhow I needed to write it as an introduction for the next post I will be writting.&lt;/p&gt;
+
+&lt;p&gt;Pentaho created a tools called &lt;a href=&quot;http://pedroalves-bi.blogspot.com/2014/02/startup-rule-engine-new-sparkl-app-in.html&quot;&gt;Startup Rule Engine&lt;/a&gt; and was covered in Pedro Alves blog, some time ago, but that’s what will covered in this blogpost.&lt;/p&gt;
+
+&lt;p&gt;When we have a multitenant environment, or we need to have one, we can use an Action Sequence to run some actions. Mondrian is capable of handling multitenancy in different ways, and one of ways is to use a DSP (Dynamic Schema Processor), information that can be found in the help pages of Pentaho, &lt;a href=&quot;https://help.pentaho.com/Documentation/6.1/0R0/070/Multi-Tenancy&quot;&gt;here&lt;/a&gt;. When using a DSP, most probably, you will need to create session variables that can be used latter in the DSP. Besides that, Startup Rule Engine, Action Sequences can easily be set and used to set the sessions variables you will need.&lt;/p&gt;
+
+&lt;p&gt;Please keep in mind that a session variable is already set when a user is logged in, and you can use it, but the value will be the username of the user that logged in. So it can be used when you are able to use it to do the filtering of the data that will be available. Otherwise you need to use some alternatives.  An example is when a user does the login we can trigger a SQL query that will set the session variable with the tenant id to be used, where the tenant id is not the username. That can later be used on Mondrian.&lt;/p&gt;
+
+&lt;p&gt;The example bellow, is from an xaction that depending on the user that logged in, sets the value for a session variable named “REGION”. If the logged in user it’s “joe”, the xaction will create a session variable with the values “APAC” so we will be able to restrict the access to user “joe”, to be only able to see “APAC” results, while “suzy” will could have access to “EMEA” and the remaining users will have access to all.&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;action-sequence&amp;gt;&lt;/span&gt; 
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;name&amp;gt;&lt;/span&gt;session-region.xaction&lt;span class=&quot;nt&quot;&gt;&amp;lt;/name&amp;gt;&lt;/span&gt;
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;%title&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1&lt;span class=&quot;nt&quot;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;logging-level&amp;gt;&lt;/span&gt;debug&lt;span class=&quot;nt&quot;&gt;&amp;lt;/logging-level&amp;gt;&lt;/span&gt;
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;documentation&amp;gt;&lt;/span&gt; 
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;author&amp;gt;&lt;/span&gt;%author&lt;span class=&quot;nt&quot;&gt;&amp;lt;/author&amp;gt;&lt;/span&gt;  
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;description&amp;gt;&lt;/span&gt;%desciption&lt;span class=&quot;nt&quot;&gt;&amp;lt;/description&amp;gt;&lt;/span&gt;  
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;help/&amp;gt;&lt;/span&gt; 
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/documentation&amp;gt;&lt;/span&gt;
+
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;inputs&amp;gt;&lt;/span&gt; 
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;user&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; 
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;sources&amp;gt;&lt;/span&gt; 
+	        &lt;span class=&quot;nt&quot;&gt;&amp;lt;session&amp;gt;&lt;/span&gt;name&lt;span class=&quot;nt&quot;&gt;&amp;lt;/session&amp;gt;&lt;/span&gt; 
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/sources&amp;gt;&lt;/span&gt; 
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/user&amp;gt;&lt;/span&gt;  
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/inputs&amp;gt;&lt;/span&gt;
+
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;outputs&amp;gt;&lt;/span&gt; 
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;user&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;destinations&amp;gt;&lt;/span&gt;
+	        &lt;span class=&quot;nt&quot;&gt;&amp;lt;session&amp;gt;&lt;/span&gt;user&lt;span class=&quot;nt&quot;&gt;&amp;lt;/session&amp;gt;&lt;/span&gt;
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/destinations&amp;gt;&lt;/span&gt;
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/user&amp;gt;&lt;/span&gt;
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;REGION&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;destinations&amp;gt;&lt;/span&gt;
+	        &lt;span class=&quot;nt&quot;&gt;&amp;lt;session&amp;gt;&lt;/span&gt;REGION&lt;span class=&quot;nt&quot;&gt;&amp;lt;/session&amp;gt;&lt;/span&gt;
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/destinations&amp;gt;&lt;/span&gt;
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/REGION&amp;gt;&lt;/span&gt;
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/outputs&amp;gt;&lt;/span&gt;
+
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;resources/&amp;gt;&lt;/span&gt;
+	  
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;actions&amp;gt;&lt;/span&gt; 
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;action-definition&amp;gt;&lt;/span&gt; 
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;component-name&amp;gt;&lt;/span&gt;JavascriptRule&lt;span class=&quot;nt&quot;&gt;&amp;lt;/component-name&amp;gt;&lt;/span&gt;
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;action-type&amp;gt;&lt;/span&gt;JavaScript To Build User Specific Result Set&lt;span class=&quot;nt&quot;&gt;&amp;lt;/action-type&amp;gt;&lt;/span&gt;
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;action-inputs&amp;gt;&lt;/span&gt; 
+	        &lt;span class=&quot;nt&quot;&gt;&amp;lt;user&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt; 
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/action-inputs&amp;gt;&lt;/span&gt;
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;action-outputs&amp;gt;&lt;/span&gt; 
+	        &lt;span class=&quot;nt&quot;&gt;&amp;lt;REGION&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;string&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt; 
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/action-outputs&amp;gt;&lt;/span&gt;
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;component-definition&amp;gt;&lt;/span&gt; 
+	        &lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;![CDATA[function getRegions( user ) {
+						    var region = &quot;none&quot;;
+				      	if( user == 'joe' ) { region = &quot;APAC&quot;; } 
+				      	else if( user == 'suzy' ) { region = &quot;EMEA&quot;; } 
+	              else { region = &quot;EMEA, APAC, ...&quot;; }
+				      	return res;
+				      }
+	            getRegions( user );
+	        ]]&amp;gt;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt; 
+	      &lt;span class=&quot;nt&quot;&gt;&amp;lt;/component-definition&amp;gt;&lt;/span&gt; 
+	    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/action-definition&amp;gt;&lt;/span&gt;
+	 
+	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/actions&amp;gt;&lt;/span&gt; 
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/action-sequence&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Once you have the action sequence ready, you need to upload it to the repository to be able to execute it, and if you execute from the Pentaho User Console when using the user “Suzy”, you will get something like:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Action Successful
+-----------------
+user=suzy
+REGION=EMEA
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now that you have the action sequence in place, you need to make sure to execute it when the user logs in. For that we need to edit the file: ../pentaho-solutions/system/sessionStartupActions.xml. There you will find something like:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;	&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Start of PentahoHttpSession startup actions. --&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.pentaho.platform.engine.core.system.SessionStartupAction&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sessionType&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.pentaho.platform.web.http.session.PentahoHttpSession&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;actionPath&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/public/your_xaction_path_and_file.xaction&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;actionOutputScope&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;session&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- End of PentahoHttpSession startup actions. --&amp;gt;&lt;/span&gt;				
+	&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Start of UserSession startup actions. --&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.pentaho.platform.engine.core.system.SessionStartupAction&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sessionType&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;org.pentaho.platform.engine.core.system.UserSession&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;actionPath&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;/public/your_xaction_path_and_file.xaction&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;actionOutputScope&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;session&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- End of UserSession startup actions. --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Start of Global startup actions. --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- &amp;lt;bean class=&quot;org.pentaho.platform.engine.core.system.SessionStartupAction&quot;&amp;gt;
+    	&amp;lt;property name=&quot;sessionType&quot; value=&quot;org.pentaho.platform.engine.security.session.TrustedSystemStartupSession&quot;/&amp;gt;
+        &amp;lt;property name=&quot;actionPath&quot; value=&quot;/public/your_xaction_path_and_file.xaction&quot;/&amp;gt;
+        &amp;lt;property name=&quot;actionOutputScope&quot; value=&quot;global&quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt; --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- End of Global startup actions. --&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You can see 3 groups starting by the tag &lt;bean&gt;. By default, they are commented and you can uncomment them if you want to have startup actions to run when the user performs a login or when Pentaho is starting. Each one of this groups is identified by the type and very important the action sequence path to be executed. The actionPath needs to be set, pointing to the folder/file of the xaction we want to be execute.  You will see session type is what makes the bid difference from group to group, and it can get the following values:&lt;/bean&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;org.pentaho.platform.web.http.session.PentahoHttpSession&lt;/li&gt;
+  &lt;li&gt;org.pentaho.platform.engine.core.system.UserSession&lt;/li&gt;
+  &lt;li&gt;org.pentaho.platform.engine.security.session.TrustedSystemStartupSession&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let’s see them as just:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;PentahoHttpSession: runs the specified action sequence when a session is created using HTTP. Useful to run some actions, as creating a session variable to be used on a DSP when the user is logged in from a browser.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;UserSession: runs the specified action sequence when a user session is created. Useful to create or run actions like creating a session variable when a session is created, not specifically from the browser, but per instance when the scheduler need to run a report on behalf of the user.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;TrustedSystemStartupSession: runs the specified action sequence when the Pentaho Server is starting. Useful when you want to execute some operations at the start of the system. Please note that this is executed on the system, so it is globally applied, not for a specific user.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;if you upload the action sequence that is included as example and if you remove the comments from both PentahoHttpSession and UserSession, the session variable will be created when a session is created for a user, independently if it was created from the browser by the user, or by the Pentaho scheduler.&lt;/p&gt;
+
+&lt;p&gt;Please keep in mind that you can also use the Startup Rule Engine to perform what was explainded here for the xaction.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt;: Before making use of a multitenant environment when using Pentaho Community Edition, make sure to completely read the terms and conditions of the software licenses.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 23 Oct 2016 10:43:00 +0100</pubDate>
+        <link>http://mfgaspar.github.io//2016/Startup-Actions-on-Pentaho/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2016/Startup-Actions-on-Pentaho/</guid>
+        
+        <category>Startup Actions</category>
+        
+        <category>Action Sequences</category>
+        
+        
+        <category>Startup Actions</category>
+        
+        <category>Action Sequences</category>
+        
+      </item>
+    
+      <item>
+        <title>Live Insight Dashboard on Pentaho - Part 3: MQTT, the Message Broker and Data Integration.</title>
+        <description>&lt;p&gt;One of the first steps when developing a IoT solution, when in the development or discovery phases starts, is to get the sensors data and send it somewhere to be processed. Depending on requirements we can go to a message centric or data centric approach.&lt;/p&gt;
+
+&lt;h2 id=&quot;mqtt-and-the-message-brokers&quot;&gt;MQTT and the message Brokers&lt;/h2&gt;
+
+&lt;p&gt;When using a message centric approach, there are multiple protocols we can use to send messages with sensor data. In this project I have used MQTT because it’s simple, powerful, easy to use and well adopted by IoT community. As referred in &lt;a href=&quot;http://mqtt.org/&quot;&gt;MQTT.org&lt;/a&gt;, MQTT is “a machine-to-machine (M2M)/”Internet of Things” connectivity protocol. It was designed as an extremely lightweight publish/subscribe messaging transport”. Great part of the IoT Industry/community it’s using MQTT as the protocol to get sensor data. if we take a look to some of the protocols, this is one of the most suitable protocols to get information to one end to another. Not the only, but one of the most used for now.&lt;/p&gt;
+
+&lt;p&gt;For this small POC, “Live Insight Dashboard on Pentaho”, initially I have used a “Raspberry Pi” to get sensor that, and it was very easy to send it over messages to an MQTT broker.  The message broker used it’s “Mosquitto”, that implements the MQTT protocol versions and provides a lightweight method of carrying out messaging using a publish/subscribe model, perfect for this POC.&lt;/p&gt;
+
+&lt;p&gt;You will get lots of good information about MQTT &lt;a href=&quot;http://www.hivemq.com/blog/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;As you can see there that MQTT is able to provide Quality of Service (QoS) level is an agreement between sender and receiver of a message regarding the guarantees of delivering a message. There are 3 QoS levels in MQTT:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;At most once (0)&lt;/li&gt;
+  &lt;li&gt;At least once (1)&lt;/li&gt;
+  &lt;li&gt;Exactly once (2).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;From project to project, the requirements can be quite different, you may not need to receive all messages, but you may also have the need to process all data and guarantee that all messages have been delivered. So just need to set up the correct configurations. At the example provide I have used QoS equals to “0”, or “at most once”, and means that I won’t mind to lose some of the messages. Once again that will be related with the requirements.&lt;/p&gt;
+
+&lt;p&gt;Also, MQTT has some security options that can be used, even if in my opinion there is yet a lot to do about security.&lt;/p&gt;
+
+&lt;p&gt;Since I wanted to be able to share this examples, I couldn’t share my “Rapsberry Pi”, so I just created some PDI transformations that could simulate sensor data, so that anyone could get working without a “Rapsberry Pi” or other hardware besides your PC.&lt;/p&gt;
+
+&lt;p&gt;So in reality I was just sending sensor data from PDI to a message broker (Mosquitto) and latter process those messages again in another transformation, in order to do some basic aggregations, statistics or even windowing. Here, you can aslso use PDI and his steps to persist data in a database or whathever you need to do. Once again it depends on requirments and the goals.&lt;/p&gt;
+
+&lt;p&gt;To be able to send messages from PDI to the MQTT broker, I have used &lt;a href=&quot;http://www.eclipse.org/paho/&quot;&gt;PAHO&lt;/a&gt;, that provides open-source client implementations of MQTT for many different languages. To send data to kettle, I have used some custom Java code in a UDJC (User Defined Java Class) in PDI. In the meanwhile, and based on some code that was written initially, &lt;strong&gt;Daniel Salgueiral&lt;/strong&gt; already contributed with PDI steps (both consumer/producer) to be possible to work with MQTT in PDI, available &lt;a href=&quot;https://github.com/danielams/kettle-mqtt-plugin&quot;&gt;here&lt;/a&gt;. To be honest I haven’t tested them yet, but challenge you to try them and contribute with some code to improve them, or just get feedback to Daniel.&lt;/p&gt;
+
+&lt;p&gt;After being processed the messages are delivered to the message broker again, but using a different topic and ready to be consumed by the dashboards or other systems that might want to use the already processed data.&lt;/p&gt;
+
+&lt;p&gt;The following diagram show what I was explaining above:
+&lt;img src=&quot;http://mfgaspar.github.io/assets/realtime_diagram_2.png&quot; alt=&quot;Samples Diagram on Live Insights Dashboard&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can also see on the diagram the main transformation using 2 UDJC steps, the first and last steps, one to consume messages and the last one to work as producer, after data being processed. The remaining steps are just steps that will process data according your requirements. In my case and depending in some parameters it can perform different operations, you can even set the name of the sub-transformation to execute, so without many changes you can have this solution working as a gateway. Very useful if your system needs to scale, and useful to make use of different protocols like AMQP or even make use of Kafka, while the communication between devices and gateways is done via MQTT, or any other.&lt;/p&gt;
+
+&lt;p&gt;You can check the samples provided in last blog post about the subject &lt;a href=&quot;http://mfgaspar.github.io/2016/Live-Insights-With-Pentado-and-Ctools-Part-2/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;On the frontend, one interesting change of paradigm on the CTools dashboard, is that I am not doing pulls to a database, but instead, data is being pushed into to the dashboard, that refresh’s the visualizations as soon as a message arrives. But this is another story that I will cover in a new blog post, so keep an eye in the blog. Anyhow let give some info in advanced, MQTT has a client library that can be used directly on the browser and inside a CTools dashboard.&lt;/p&gt;
+
+&lt;p&gt;Are there any options besides MQTT? Yes, there is a lot of options as also a lot of tools to use in IoT and to produce incredible analytics, once again, it all depend on the requirements.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 20 Oct 2016 20:59:00 +0100</pubDate>
+        <link>http://mfgaspar.github.io//2016/Live-Insights-With-Pentado-and-Ctools-Part-3/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2016/Live-Insights-With-Pentado-and-Ctools-Part-3/</guid>
+        
+        <category>Live Insights</category>
+        
+        
+        <category>Live Insights</category>
+        
+      </item>
+    
+      <item>
+        <title>Embeding Dashboards - Externally consuming/generating events</title>
+        <description>&lt;p&gt;On the last blog post, I have talked about embedding dashboards. Now let’s see how we can consume or generate events.&lt;/p&gt;
+
+&lt;p&gt;When embedding a dashboard, does not matter if it’s a CDF or CDE dashboard, you can trigger or listen to events to or from embedded dashboards. This way you can create interaction between the element of your page and a CDF/CDE dashboard, as also the opposite.&lt;/p&gt;
+
+&lt;h2 id=&quot;events-that-can-be-consumed-externally&quot;&gt;Events that can be consumed externally&lt;/h2&gt;
+
+&lt;p&gt;The events functionality, is an extension of &lt;a href=&quot;http://backbonejs.org/#Events&quot;&gt;Backbone&lt;/a&gt;, and below you will find a list of useful events you can use with CDF/CDE. When we need to respond or trigger some actions we can listen or trigger them:&lt;/p&gt;
+
+&lt;p&gt;Events triggered by the dashboard object:&lt;/p&gt;
+
+&lt;h3 id=&quot;parameters&quot;&gt;Parameters:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Parameter changes - When a parameter changes its value, the events ‘&lt;parameterName&gt;:fireChange' are triggered.&lt;/parameterName&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;dashboard-lifecycle&quot;&gt;Dashboard Lifecycle:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Dashboard preInit - When the dashboard finishes running the preInit method, the event ‘cdf:preInit’ is triggered.&lt;/li&gt;
+  &lt;li&gt;Dashboard postInit - When the dashboard finishes running the postInit methods, the event ‘cdf:postInit’ is triggered.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;components-lyfecycle&quot;&gt;Components Lyfecycle:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;PreExecution - When the component finishes running the preExecution, the event ‘cdf:preExecution’ is triggered.&lt;/li&gt;
+  &lt;li&gt;PostFetch - When the component finishes running the postFetch runs, the event ‘cdf:postFetch’ is triggered.&lt;/li&gt;
+  &lt;li&gt;Render - When the component runs the triggerAjax successfully, the event ‘cdf:render’ is triggered.&lt;/li&gt;
+  &lt;li&gt;PostExecution - When the component finishes running the postExecution, the event ‘cdf cdf:postExecution’ is triggered.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;debugging-and-error-handling&quot;&gt;Debugging and error handling:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Error - If an error is triggered during component execution, the event ‘cdf:error’ is triggered.&lt;/li&gt;
+  &lt;li&gt;User not logged in - When the dashboard detects that an user is no longer logged in, the event ‘cdf:loginError’ is triggered.&lt;/li&gt;
+  &lt;li&gt;Server error - If a call to the server returns an error, the event ‘cdf:serverError’ is triggered.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Per instance, if you want to send a message to a remote webservice each time the dashboard is rendered, you can do something like:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'cdf/Dashboard.Bootstrap'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'cdf/Logger'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; 
+	&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Dashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Logger&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dashboard&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Dashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  		&lt;span class=&quot;nx&quot;&gt;dashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'cdf:postInit'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    		&lt;span class=&quot;nx&quot;&gt;sendMessageOnDashboardPostInit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+  		&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Or, let’s suppose we have two dashboards, one that has a filter, and another own that has a line chart, and you want to trigger a change on the chart when you change the selected options on the filter, you can do something like:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'dash!/public/dash/selectorDash.wcdf'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'dash!/public/dash/lineChartDash.wcdf'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+	&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;SelectorDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;LineChartDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;selectorDash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;SelectorDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;selector&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;selectorDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+		&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;lineChartDash&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;LineChartDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;lineChart&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;lineChartDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;selectorDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;on&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;productLine:fireChange&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;evt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;nx&quot;&gt;lineChartDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fireChange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;productLine&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;evt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The way to interact with your webpage/webapp can be similar to the example above. Note that when you need to apply some changes to a dashboard you can do a fireChange. Use the “on” function to listen to events, that will trigger some actions.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 16 Oct 2016 22:54:00 +0100</pubDate>
+        <link>http://mfgaspar.github.io//2016/Embeding-CDF-and-CDE-Dashboards-Part-2/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2016/Embeding-CDF-and-CDE-Dashboards-Part-2/</guid>
+        
+        <category>Embedding</category>
+        
+        
+        <category>Embedding</category>
+        
+      </item>
+    
+      <item>
+        <title>Embeding Dashboards - The Basics</title>
+        <description>&lt;p&gt;In a earlier &lt;a href=&quot;http://pedroalves-bi.blogspot.pt/2013/08/embedded-analytics-in-pentaho-with.html&quot;&gt;post&lt;/a&gt;, Pedro Alves talked about embedding CTools dashboards in two different ways: using “div” and “iframe” integration.&lt;/p&gt;
+
+&lt;p&gt;Now that we have RequireJS, there are better ways to integrate dashboards in other application.&lt;/p&gt;
+
+&lt;p&gt;As you should now there are two kinds of custom dashboards in Pentaho:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;CDF dashboards,&lt;/li&gt;
+  &lt;li&gt;CDE dashboards;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;To be able to embed the dashboards you first need to create them, so let’s suppose you already have some dashboards you want to be part of your website/webapp. The dashboards, build with RequireJS can also be embedded via RequireJS, so let’s cover how.&lt;/p&gt;
+
+&lt;h2 id=&quot;embedding-cdf-dashboards&quot;&gt;Embedding CDF dashboards&lt;/h2&gt;
+
+&lt;p&gt;If you have some requirements were you need to have a complete control of your html and code being executed, then for sure you want to build a CDF dashboard. You can write the code of your dashboard in the page were you are embedding it. To do it, there is one mandatory script you need to include, that’s the script with the code that will allows us to call the CDF dashboard. For that you need to make the requests
+ to your Pentaho Server, so that the server can return the script. 
+You just need the following script tag:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;script&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://SERVERNAME&amp;lt;:PORT&amp;gt;/WEBAPPPATH/plugin/pentaho-cdf/api/cdf-embed.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Per instance, if your server is in the same machine,localhost, and running in port 8080:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;script&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8080/pentaho/plugin/pentaho-cdf/api/cdf-embed.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This will give your acess to the CDF framework.&lt;/p&gt;
+
+&lt;p&gt;You jut need to build your dashboard code inside an HTML page or just include the code that’s on another file and that way you will be able to reuse it.&lt;/p&gt;
+
+&lt;p&gt;An HTML page where you are embeding your dashboard can llok like:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;http-equiv=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;content-type&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/html; charset=utf-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;mySample&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8080/pentaho/plugin/pentaho-cdf/api/cdfembed.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/head&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;	&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;am&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;embedding&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;CDF&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dashboard&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;HTML&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;		&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Here&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Will&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;have&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;own&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;		&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;And&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;here&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;I&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;will&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;embed&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dashboard&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt; 
+			&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;div&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;sampleObject&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/div&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;gt;
+&lt;/span&gt;			&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;script&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+				&lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'cdf/Dashboard.Blueprint'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'cdf/components/SelectComponent'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+					&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Dashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;SelectComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+						&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;myDashboard&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Dashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+						&lt;span class=&quot;nx&quot;&gt;myDashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addParameter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;region&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+						&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;selectComponent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;SelectComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;regionSelector&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;select&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;parameters&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[],&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;valuesArray&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Lisbon&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],[&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Dusseldorf&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;region&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;valueAsId&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;htmlObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sampleObject&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;executeAtStart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+							&lt;span class=&quot;na&quot;&gt;postChange&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+								&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;choice&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;myDashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;getParameterValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+								&lt;span class=&quot;nx&quot;&gt;parameter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+								&lt;span class=&quot;nx&quot;&gt;alert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;You chose: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;choice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+							&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+						&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+						&lt;span class=&quot;nx&quot;&gt;myDashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;addComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;selectComponent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+						&lt;span class=&quot;nx&quot;&gt;myDashboard&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+					&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+			&lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As you can see on the code above, we start by addind a script tag to include the CDF framework in our webpage, and latter we are able to use the framework to build a CDF dashboard that is embedded in the webpage/webapp.&lt;/p&gt;
+
+&lt;h2 id=&quot;embedding-cde-dashboards&quot;&gt;Embedding CDE dashboards&lt;/h2&gt;
+
+&lt;p&gt;If you are the king of developer that wants to save some time, than you can build your dashboard using CDE, than it’s also possible to embed it.&lt;br /&gt;
+To embed a CDE dashboard, you really must have the dashboard already built and you just need to require it on your webpage/webapp. To do it you also need to include a script tag to call for the dashboard. Here you won’t need to include the CDF framework, but you will need to require the CDE framework, that will automatically include CDF.&lt;/p&gt;
+
+&lt;p&gt;The way to call it is like following:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;script&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://SERVERNAME&amp;lt;:PORT&amp;gt;/WEBAPPPATH/plugin/pentaho-cdf/api/cde-embed.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt; 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Per instance, if your server is in “localhost”, and running in port “8080”:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;script&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/javascript&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://localhost:8080/pentaho/plugin/pentaho-cdf/api/cde-embed.js&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Once you did it you are able to require for your dashboard, by directly calling the getDashboard available in CDE or by making use of the “dash” RequireJS plugin.&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'/pentaho/plugin/pentaho-cdf-dd/api/renderer/getDashboard?path=/public/dash /sample.wcdf'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; 
+	&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;SampleDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sampleDash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;SampleDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;content1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;sampleDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Or:&lt;/p&gt;
+
+&lt;div class=&quot;language-javascript highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'dash!/public/dash /sample.wcdf'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; 
+	&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;SampleDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sampleDash&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;SampleDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;content1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+		&lt;span class=&quot;nx&quot;&gt;sampleDash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Here you can render your dashboard in your webpage/webapp by calling the &lt;strong&gt;render()&lt;/strong&gt; method of your dashboard, but another option is to use &lt;strong&gt;setupDOM()&lt;/strong&gt; followed by &lt;strong&gt;renderDashboard()&lt;/strong&gt;. The great advantage of using the setupDOM() first you will get the DOM in your page and you will be able to manipulate it before starting the lifecycle of the dashboard.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; please keep in mind that the scripts tags that were used as example also can be called using RequireJS. but for that you need to include RequireJS in your page.&lt;/p&gt;
+
+&lt;h2 id=&quot;avoid-cross-site-domain-request&quot;&gt;Avoid Cross Site Domain Request&lt;/h2&gt;
+
+&lt;p&gt;When embedding dashboards from a different server we might get some denial, because the server won’t allow Cross Domain Requests. There is on one extra setting that we can make use of to avoid it. To be possible to embed the dashboard with this issue, we can set the following property of the settings.xml file of CDF or CDE plugins:&lt;/p&gt;
+
+&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;allow-cross-domain-resources&amp;gt;&lt;/span&gt;true&lt;span class=&quot;nt&quot;&gt;&amp;lt;/allow-cross-domain-resources&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You are now able to delight your users with amazing analytics, without completely  getting out of your website/webapp and without letting the user know what technologies are you using to leverage some of the work.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 15 Oct 2016 22:22:00 +0100</pubDate>
+        <link>http://mfgaspar.github.io//2016/Embeding-CDF-and-CDE-Dashboards-Part-1/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2016/Embeding-CDF-and-CDE-Dashboards-Part-1/</guid>
+        
+        <category>Embedding</category>
+        
+        
+        <category>Embedding</category>
+        
+      </item>
+    
+      <item>
+        <title>The evolution of analysis: OLTP, OLAP ... RTAP</title>
+        <description>&lt;p&gt;Big Data and IoT brings new challenges but also new opportunities to get augmented results into our companies.&lt;/p&gt;
+
+&lt;p&gt;Over the time there were multiple ways to store, process and analyze data. We’ve started to build reports on top of OLTP, them we’ve evaluated to more intelligent analysis using OLAP concepts, but now given the volume the variety and the velocity of the data now a day, we might have new needs on how to analyze data. That’s what Real-time Analysis Processing (RTAP) can bring us. New ways to analyze a huge volume and variety of different data as also we need to analyze it faster.&lt;/p&gt;
+
+&lt;p&gt;The diagram below show the evolution of analysis over time and volume size.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://mfgaspar.github.io/assets/rtap_evolution_chart.png&quot; alt=&quot;Evolution over time&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;once-up-on-a-time-we-could-build-reports-on-oltp-&quot;&gt;Once up on a time we could build reports on OLTP …&lt;/h3&gt;
+
+&lt;p&gt;Once up on a time, companies had the need to summarize data to take decision, but the queries and reports that were built at the time, did take some time to developed and usually were built on demand. It was impossible to determine if you had the right version of a spreadsheet, with the most current data and logic in it. I am not too old (at least I like to think that way), but I can remember companies were building reports on top of a OLTP database, that could be nice because business users would get fresh results, but sometimes causing performance issues on their day to day work.&lt;/p&gt;
+
+&lt;p&gt;Reports were not much interactive and most of the times delivered to people in paper (even if I had some fights to stop doing it and bring them online). But OLTP was characterized by a large number of short on-line transactions, maintaining data integrity in multi-access environments and an effectiveness measured by number of transactions per second.&lt;/p&gt;
+
+&lt;p&gt;Business users were able to create simple logic on data structured in rows and columns and create their own analyses in a spreadsheet to business problems, but, it was almost impossible to determine if you had the right version of a spreadsheet, with the most current data and logic in it. So that was not really the best solution.&lt;/p&gt;
+
+&lt;h3 id=&quot;getting-clever-by-using-olap-for-analysis-&quot;&gt;Getting clever by using OLAP for analysis …&lt;/h3&gt;
+
+&lt;p&gt;As is referred in &lt;a href=&quot;https://en.wikipedia.org/wiki/Online_analytical_processing&quot;&gt;Wikipedia&lt;/a&gt;, databases configured for Online Analytical Processing (OLAP) use a multidimensional data model, allowing for complex analytical and ad hoc queries with a rapid execution time, and, able to provide three basic analytical operations: consolidation (roll-up), drill-down, and slicing and dicing. That brought a great advantage when building analysis, where any user is able to build them in a easy way, share them with another users, anyhow there was still the need to look for opportunities, risks, …&lt;/p&gt;
+
+&lt;p&gt;Whereas a relational database and OLTP can be thought of as two-dimensional, a multidimensional database considers each data attributes a separate “dimension” that brings the ability to create multidimensional analysis.&lt;/p&gt;
+
+&lt;p&gt;Being smart enough we were able to bring Machine Learning and Data Mining into the picture, doing more clever stuff like predicting what would a user buy, or just improve usability of software, build better products, and even do sentiment analysis, among many others.&lt;/p&gt;
+
+&lt;p&gt;This was the era known as the era of Business Intelligence.&lt;/p&gt;
+
+&lt;p&gt;But as data is becoming faster to acquire and as companies now understand that data is a big advantage on business, the volume of data started to increase very fast, so the process to analyze it, also are improving.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-new-generation-of-analysis-&quot;&gt;The new generation of analysis …&lt;/h3&gt;
+
+&lt;p&gt;Now we should imagine how would it be if we can build analysis, get insights or do predictions in real-time and using stream data, easier and faster to build. The variety of data, the big volume of data we are storing and the velocity we are doing it as also the velocity we need to analyze it, brings us new challenges. If Big Data could be too big, with IoT the challenge is becomes much bigger, and also interesting.&lt;/p&gt;
+
+&lt;p&gt;That’s were Real-time Analysis Processing (RTAP) comes into the picture and can give a great help. It enables us to get smart decisions without the need of the user interaction to get the best solution, decision and preventing mistakes. We are now in a time we have better insights, without the need to request for it and in useful time. We shouldn’t have the need to request for insights, the insights should get to use when there is a need to take decision, even decisions should be delivered to us, we just need to decide if taken or not. We can even get the change to know when the best time to take a decision, but we need to be able to do it before it’s too late, so it’s something who need to take action now, we need to know it previously.&lt;/p&gt;
+
+&lt;p&gt;We are able to use data in motion to predict business opportunities, while at the same time we can improve business operations, identify risks and comply with laws or regulatory requirements, among many others. This is not new, but there are now new ways to bring them to companies.&lt;/p&gt;
+
+&lt;p&gt;There are still some customers, that mix the concepts trying to build analysis on top of OLTP, or just trying to have Real-time on top of OLAP, and many other cases. There are customs that don’t even know we have all these capabilities now a day. It’s up on us, consultants and expertise on the area, to help them to understand, to get them to know what are the options, what they need to build and use based on their real requirements, and not based what they think they need.&lt;/p&gt;
+
+&lt;p&gt;It doens’t mean that OLAP will be oput of equation, it’s still great and we take leverage and take advantages of most part of it’s concepts, but we need to work them in other ways and not the traditional ones. Depending on the requirments, we will have better solutions if we do RTAP and mix OLAP concepts.&lt;/p&gt;
+
+&lt;p&gt;Follow me at &lt;a href=&quot;https://twitter.com/migfgaspar&quot;&gt;Twitter&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 27 Jul 2016 22:20:00 +0100</pubDate>
+        <link>http://mfgaspar.github.io//2016/OLTP-vs-OLAP-vs-RTAP/</link>
+        <guid isPermaLink="true">http://mfgaspar.github.io//2016/OLTP-vs-OLAP-vs-RTAP/</guid>
+        
+        <category>Big Data</category>
+        
+        <category>IoT</category>
+        
+        <category>Analytics</category>
+        
+        
+        <category>Big Data</category>
+        
+        <category>IoT</category>
+        
+      </item>
+    
   </channel>
 </rss>
