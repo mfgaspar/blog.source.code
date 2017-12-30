@@ -65,7 +65,7 @@ function() {
   var template =  '' +
     '<ul>' +
     {% raw  %}'{{#items}}' +{% endraw %}
-    '<li> {{0}}: {{ 1 | formatter : "monetary" : 1}} </li>'+
+    {% raw  %}'<li> {{0}}: {{ 1 | formatter : "monetary" : 1}} </li>'{% endraw %}+
     {% raw  %}'{{/items}}' +{% endraw %}
     '</ul>'; 
   return template;
