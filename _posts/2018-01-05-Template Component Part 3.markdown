@@ -29,7 +29,7 @@ From the image above, we can find the following list of addins types:
 9. cccChart: This add-in allows you to display any CCC chart, very powerful but also very tricky to use.
 
 The way to use the addins is quite simple. When using the Mustache, we can call one addin by using the following syntax: 
-**{% raw  %}{{ value | addin | "addin_type" : addin_id }}{% endraw  %}**, where we can see the folwoing options:
+**{% raw  %}{{{ value | addin | "addin_type" : addin_id }}}{% endraw  %}**, where we can see the folwoing options:
 
 - **value**: the value to be passed to the addin
 - **addin**: it indicates that we want to call an addin. Another option would be formatters like we saw on the last post
@@ -43,7 +43,7 @@ function() {
   var template =  '' +
     '<ul>' +
     {% raw  %}'{{#items}}' +{% endraw %}
-    '<li> {{0}}: {{ 1 | formatter : "monetary" : 1}} {{ 2 | addin : "trendArrrow" : ""}} </li>'+
+    {% raw  %}'<li> {{0}}: {{{ 1 | formatter : "monetary" : 1 }}} {{{ 2 | addin : "trendArrrow" : "none"}}} </li>'+{% endraw  %}
     {% raw  %}'{{/items}}' +{% endraw %}
     '</ul>'; 
   return template;

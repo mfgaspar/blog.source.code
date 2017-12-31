@@ -51,7 +51,7 @@ function(value, id){
 **TIP: We can use the id as an option, suppose you have different signs you want to use, you cn then pass the signs as the argument in the id.**
 
 **STEP 2:**
-The second step is to make use of the formatter function inside the template we want to use. Let's suppose we called the formatter "monetary". The way to invoke the formatter by calling the function. The syntax is different between Mustache and Underscore, we will focus on the syntax for Mustache. The formatter can be invoked by using  **{% raw  %}{{ value | formatter | "formatter_name" : id }}{% endraw  %}**, where we can find the following arguments:
+The second step is to make use of the formatter function inside the template we want to use. Let's suppose we called the formatter "monetary". The way to invoke the formatter by calling the function. The syntax is different between Mustache and Underscore, we will focus on the syntax for Mustache. The formatter can be invoked by using  **{% raw  %}{{{ value | formatter | "formatter_name" : id }}}{% endraw  %}**, where we can find the following arguments:
 
 - **value**: the value to be formatted
 - **formatter**: it indicates that we want to apply formatters. Another option would be addins, that we will cover in another blog post
@@ -65,7 +65,7 @@ function() {
   var template =  '' +
     '<ul>' +
     {% raw  %}'{{#items}}' +{% endraw %}
-    {% raw  %}'<li> {{0}}: {{ 1 | formatter : "monetary" : 1}} </li>'{% endraw %}+
+    {% raw  %}'<li> {{0}}: {{{ 1 | formatter : "monetary" : 1}}} </li>'{% endraw %}+
     {% raw  %}'{{/items}}' +{% endraw %}
     '</ul>'; 
   return template;
