@@ -81,7 +81,9 @@ We now need to have in consideration, that's easier to build the template, that'
 } {% endraw  %}
 ```
 
+So, using the model handler you can easly create your templates, even if it gives us some more work creating the model handler.
 
+Please refer to the Book [Learning Pentaho CTools](https://www.packtpub.com/big-data-and-business-intelligence/learning-pentaho-ctools) to get more details.
 
 Follow me at [Twitter](https://twitter.com/migfgaspar)
 
