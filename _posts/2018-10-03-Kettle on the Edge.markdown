@@ -1,5 +1,5 @@
 ---
-title:  "Kettle used on the edge after getting on a diet!"
+title:  "Getting PDI on diet to use it on edge processing!"
 date:   2017-12-30 08:00
 categories: [IoT, Pentaho, Data Integration, Kettle]
 tags: [IoT, Pentaho, Data Integration, Kettle, Edge, Kitchen, Pan]
