@@ -1,6 +1,6 @@
 ---
 title:  "Template Component - Part 1: The concept and basic usage"
-date:   2017-12-29 08:00
+date:   2017-12-26 08:00
 categories: [Pentaho, CTools, Components]
 tags: [Pentaho, CTools, Components, Template Component]
 ---

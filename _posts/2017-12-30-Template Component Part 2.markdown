@@ -1,6 +1,6 @@
 ---
 title:  "Template Component - Part 2: The use of formatters"
-date:   2017-12-30 08:00
+date:   2017-12-27 08:00
 categories: [Pentaho, CTools, Components]
 tags: [Pentaho, CTools, Components, Template Component]
 ---

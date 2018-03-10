@@ -1,6 +1,6 @@
 ---
 title:  "Template Component - Part 4: The model handler"
-date:   2018-01-12 10:00
+date:   2017-12-29 10:00
 categories: [Pentaho, CTools, Components]
 tags: [Pentaho, CTools, Components, Template Component]
 ---

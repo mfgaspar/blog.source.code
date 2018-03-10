@@ -1,6 +1,6 @@
 ---
 title:  "Template Component - Part 5: The event handlers"
-date:   2018-01-22 08:00
+date:   2017-12-30 08:00
 categories: [Pentaho, CTools, Components]
 tags: [Pentaho, CTools, Components, Template Component]
 ---
