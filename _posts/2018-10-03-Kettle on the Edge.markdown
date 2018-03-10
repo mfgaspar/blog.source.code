@@ -1,5 +1,5 @@
 ---
-title:  "Getting PDI on diet to use it on edge processing!"
+title:  "Get PDI on diet and use it on edge computing!"
 date:   2017-12-30 08:00
 categories: [IoT, Pentaho, Data Integration, Kettle]
 tags: [IoT, Pentaho, Data Integration, Kettle, Edge, Kitchen, Pan]
@@ -22,7 +22,7 @@ To reduce your solution time to market, you can also make use of tools that will
 
 One of the problem of amazing tools is that they get big and sometimes they provide much more then we need for simpler, anyhow more complex tasks.
 
-## So, can we use Pentaho Data Integration for Edge processing?
+## So, can we use Pentaho Data Integration for Edge Computing?
 
 The answer is off course, yes, we can! 
 
@@ -82,9 +82,9 @@ You will see the job/transformation is started instantaneously, and no starting 
 
 Unfortunately, I had to leave Windows out of this, anyhow as for now I don't see windows as the operating system for edge computing. Just a reminder that you can still develop the transformations and jobs in Windows but having proper tests in place to make sure that you've developed will work on the Edge version of Pentaho Data Integration.
 
-Have fun creating jobs and transformations to be used on edge processing on small and scarse resources devices.  
+Have fun creating jobs and transformations to be used on edge Computig on small and scarse resources devices.  
 
-NOTE: This is great solution not only for Edge processing but can also be used in solutions that uses "serverless" and part of the backend, as Dan Keeley has already mentioned on a post on his blog. Some other uses cases are cloud and elastic computing that I will later write a post about it. 
+NOTE: This is great solution not only for edge computing but can also be used in solutions that uses "serverless" and part of the backend, as Dan Keeley has already mentioned on a post on his blog. Some other uses cases are cloud and elastic computing that I will later write a post about it. 
 
 
 Follow me at: 
