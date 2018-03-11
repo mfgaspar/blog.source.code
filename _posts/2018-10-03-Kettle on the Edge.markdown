@@ -32,7 +32,7 @@ On Edge devices or gateways you will probably be executing Kitchen, Pan or even 
 
 ## Let's get to the point and check what it can be done on that sense
 
-First, I need to raise a warning, this is not supported by Pentaho, so you need to do/use it on your own risk!
+First, I need to raise a warning, this is **totally unsupported by Pentaho, so you need to do/use it on your own risk!**
 
 Second, I need to set some of the goals/objectives:
 * Start with core and base kettle tool that provides essential functionality for edge processing;
@@ -52,7 +52,7 @@ Also, there are plugins that most of the time we don't use, and that most of the
 
 **Less than 160MB of Pentaho Data Integration to be used!**
 
-I have reduced components to a core and had not to recompile Kettle. So, now I do have a Kettle solution that takes less then 170 MB of disk space and consumes less computing recourses so better efficiency while doing edge processing, just by running and maybe designing your kettle transformations and jobs on the edge. 
+I have reduced components to a core and had not to recompile Kettle. So, now I do have a Kettle solution that takes less than 160 MB of disk space and consumes less computing recourses so better efficiency while doing edge processing, just by running and maybe designing your kettle transformations and jobs on the edge. 
 
 So, what were the main transformation I did?
 
