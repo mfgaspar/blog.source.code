@@ -58,11 +58,11 @@ So, what were the main transformation I did?
 
 ### Removing OSGI and dependencies
 
-We can remove Karaf/OSGI listeners but there are still some dependencies that will stop spoon to start. Even if it only this change, works good on kitchen and pan, spoon would break, and I wanted to have spoon also running. So, I had to remove dependencies from PentahoSystem.java class and recompile it. But that's how much I had to do have lightning fast startup also on Spoon. No need to recompile Kettle code, only had to replace the jar file from Pentaho platform code.  
+We can remove Karaf/OSGI listeners but there are still some dependencies on the code that will break spoon during startup. Even if it works well on kitchen and pan, spoon would break, and I wanted to have spoon also running. So, I had to remove some "dependencies" from PentahoSystem.java class and recompile it. But that's how much I had to do to have a lightning  startup also on Spoon. No need to recompile PDI code, only had to replace the jar file from Pentaho Platform Core.  
 
 ### Plugins removed: 
 
-I have removed most of the plugins that are inside the plugins folder except for essential as json, xlm, platform utils, core plugins, dummy (yes we should avoid using it, but it is quite useful sometimes)
+I've removed most of the plugins that are inside the plugins folder except for essential as json, xlm, platform utils, core plugins, dummy (yes we should avoid using it, but it is quite useful sometimes)
 
 Samples were also removed to save disk space and have faster deploy process. Karaf folder was completely removed. 
 
