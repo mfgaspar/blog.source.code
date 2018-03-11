@@ -40,7 +40,7 @@ Second, I need to set some of the goals/objectives:
 * To be able to re-include plugins as we need;
 * Consume as less memory, cpu and disk space as possible.
 
-Let me know if you find issues and please contribute with improvements. Share experiences and feedback while using it! We can make it much better, I just spend couple of hours putting this in place, so I know that lots of improvements can be done. 
+Let me know if you find issues and please contribute with improvements. Share experiences and feedback while using it! We can make it much better, I just spend couple of hours putting this in place, so I know that lots of improvements can and must be done. 
 
 ## Getting PDI on a diet 
 
