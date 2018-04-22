@@ -39,5 +39,7 @@ We can go much further with it. Per instance I have built an augmented reality a
 
 On the next blog post I will start with the diferent ways to embed Pentaho. 
 
+**NOTE: that part of the solution was built with Pentaho Analyzer that's an Enterprise Feature. To have it full working you will need to have Enterprise Licenses** 
+
 
 [Live Insights]: #
